@@ -2,29 +2,130 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Mes Projets | Portfolio GMP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Projets | Portfolio Enzo</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        // SCRIPT PRIORITAIRE : On applique le thème avant que la page ne s'affiche
+        if (localStorage.getItem("theme") === "light") {
+            document.documentElement.classList.add("light-mode");
+        }
+    </script>
 </head>
+
 <body>
-    <nav>
-        <a href="index.html" class="logo">PORTFOLIO GMP</a>
+
+<nav>
+    <div class="nav-container">
+        <a href="index.html" class="logo">
+            <img src="common/Logo_IUT.png" alt="Logo IUT" class="nav-logo-img">
+            <span>PORTFOLIO GMP</span>
+        </a>
         <ul>
             <li><a href="index.html">Accueil</a></li>
-            <li><a href="projets.html">Projets</a></li>
-            <li><a href="cv.pdf" target="_blank" class="btn-cv">Mon CV</a></li>
+            <li><a href="projets.html" class="active">Projets</a></li>
+            <li><a href="common/cv.pdf" target="_blank" class="btn-cv">Mon CV</a></li>
+            <li><button id="theme-toggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button></li>
         </ul>
-    </nav>
+    </div>
+</nav>
 
-    <section>
-        <h1>Mes Projets par Semestre</h1>
-        <div class="grid">
-            <a href="s1.html" class="card"><h3>Semestre 1</h3><p>SAÉ 1.1 à 1.4 : Bases de la mécanique et CAO</p></a>
-            <a href="s2.html" class="card"><h3>Semestre 2</h3><p>SAÉ 2.1 à 2.5 : Approfondissement et réalisation</p></a>
-            <a href="#" class="card disabled"><h3>Semestre 3</h3><p>En cours...</p></a>
-            <a href="#" class="card disabled"><h3>Semestre 4</h3><p>À venir</p></a>
-            <a href="#" class="card disabled"><h3>Semestre 5</h3><p>À venir</p></a>
-            <a href="#" class="card disabled"><h3>Semestre 6</h3><p>À venir</p></a>
+<header class="hero" style="padding: 60px 20px 40px;">
+    <div class="hero-content">
+        <span class="badge">RÉALISATIONS</span>
+        <h1>Cursus & Passions</h1>
+        <p class="description">Retrouvez ici mes <strong>SAE</strong> structurés par semestre ainsi que mes <strong>projet</strong> personnelles.</p>
+    </div>
+</header>
+
+<main class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">S
+    
+    <h2 style="margin-bottom: 30px; border-left: 4px solid var(--primary); padding-left: 15px;">🎓 Parcours BUT GMP</h2>
+    <div class="skills-grid" style="margin-bottom: 80px;">
+        <a href="s1.html" class="skill-item">
+            <i class="fa-solid fa-1"></i>
+            <span>Semestre 1</span>
+            <p style="color: var(--text-sub); font-size: 0.9rem; margin-top: 10px;">SAÉ 1.1 à 1.4: Analyse, modification, prototype et interview</p>
+        </a>
+
+        <a href="s2.html" class="skill-item">
+            <i class="fa-solid fa-2"></i>
+            <span>Semestre 2</span>
+            <p style="color: var(--text-sub); font-size: 0.9rem; margin-top: 10px;">SAÉ 2.1 à 2.5 : Processus, implantation, Fabrication, pilotage, securité </p>
+        </a>
+
+        <div class="skill-item" style="opacity: 0.5; cursor: not-allowed; filter: grayscale(1);">
+            <i class="fa-solid fa-lock"></i>
+            <span>Semestres 3 & 4</span>
+            <p style="color: var(--text-sub); font-size: 0.9rem; margin-top: 10px;">Prochainement</p>
         </div>
-    </section>
+    </div>
+
+    <h2 style="margin-bottom: 30px; border-left: 4px solid var(--primary); padding-left: 15px;">🚀 Projets Personnels</h2>
+    <div class="skills-grid" style="margin-bottom: 100px;">
+        
+        <div class="skill-item">
+            <i class="fa-solid fa-cube"></i>
+            <span>Impression 3D & DIY</span>
+            <p style="color: var(--text-sub); font-size: 0.9rem; margin-top: 10px;">Maintenance d'imprimante FDM et conception d'accessoires sur-mesure.</p>
+            <div class="comp-tags" style="justify-content: center; margin-top: 15px;">
+                <span>FDM</span> <span>SolidWorks</span>
+            </div>
+        </div>
+
+<a href="common/projects/projet-pocket/projet-pocket.html" class="skill-item">
+  <div style="display: flex; align-items: center; justify-content: flex-start; gap: 15px; margin-bottom: 20px;">
+    
+    <img src="common/projects/projet-pocket/pocket-bike.png" class="skill-icon" 
+         style="height: 2.5rem; width: auto; transition: transform 0.3s ease; margin: 0;">
+    
+    <span style="font-size: 1.1rem; font-weight: 800; margin: 0;">Réparation Pocket Bike</span>
+    
+    <i class="fa-solid fa-wrench wrench-icon" 
+       style="font-size: 1.5rem; color: var(--primary); transition: transform 0.3s ease; transform: translateY(4px); display: inline-flex;"></i>
+</div>
+
+    <p style="color: var(--text-sub); font-size: 0.9rem; text-align: left;">
+        À partir d'une pocket bike non fonctionnelle, j'ai réussi à changer des pièces et à la réparer pour la remettre en marche.
+    </p>
+
+    <div class="comp-tags" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+        <span>Atelier</span> <span>Mécanique</span>
+    </div>
+</a>
+
+    </div>
+</main>
+
+<script>
+    const btn = document.getElementById("theme-toggle");
+    const icon = btn.querySelector("i");
+
+    // Fonction pour mettre à jour l'icône
+    function updateIcon(isLight) {
+        if (isLight) {
+            icon.classList.replace("fa-moon", "fa-sun");
+        } else {
+            icon.classList.replace("fa-sun", "fa-moon");
+        }
+    }
+
+    // Appliquer le thème au chargement si besoin (pour l'icône)
+    if (localStorage.getItem("theme") === "light") {
+        updateIcon(true);
+    }
+
+    btn.addEventListener("click", () => {
+        // On bascule la classe
+        const isLight = document.body.classList.toggle("light-mode");
+        
+        // --- LA LIGNE MANQUANTE ÉTAIT ICI ---
+        localStorage.setItem("theme", isLight ? "light" : "dark");
+        
+        updateIcon(isLight);
+    });
+</script>
+
 </body>
 </html>

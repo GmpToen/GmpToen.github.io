@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet Pocket Bike | Enzo Sanchez Sartori</title>
+    
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script>
+        // SCRIPT PRIORITAIRE : On applique le thème avant que la page ne s'affiche
+        if (localStorage.getItem("theme") === "light") {
+            document.documentElement.classList.add("light-mode");
+        }
+    </script>
+
+ <style>
+    /* 1. Agrandissement de l'image et réduction de l'espace */
+    .hero { padding: 40px 0 10px !important; } /* Réduit l'espace sous le titre */
+    .bike-explorer { 
+        position: relative; 
+        max-width: 1100px; /* Plus grand */
+        margin: 0 auto 40px; 
+        padding: 0; 
+    }
+    .main-img { width: 100%; display: block; filter: drop-shadow(0 0 15px var(--primary-glow)); }
+
+    /* 2. Styles des bulles (inchangés sauf pour le bas) */
+    .point { position: absolute; background: var(--primary); color: white; padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; box-shadow: 0 0 15px var(--primary-glow); z-index: 10; cursor: pointer; }
+    .p-carbu { top: 67%; left: 35%; }
+    .p-chaine { bottom: 45%; left: 25%; }
+    .p-corps { top: 5%; right: 45%; }
+
+    .tooltip {
+        visibility: hidden; width: 220px; background-color: var(--bg-card); color: var(--text-main); text-align: center; border-radius: 10px; padding: 12px; position: absolute; z-index: 100;
+        opacity: 0; transition: all 0.3s ease; border: 1px solid var(--primary); font-size: 0.75rem; font-weight: 400; box-shadow: 0 8px 20px rgba(0,0,0,0.4); pointer-events: none;
+        left: 50%; transform: translateX(-50%);
+    }
+
+    /* Bulle vers le HAUT (par défaut) */
+    .tooltip-up { bottom: 130%; }
+    .tooltip-up::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--primary) transparent transparent transparent; }
+
+    /* Bulle vers le BAS (pour le carbu) */
+    .tooltip-down { top: 130%; }
+    .tooltip-down::after { content: ""; position: absolute; bottom: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: transparent transparent var(--primary) transparent; }
+
+    .point:hover .tooltip { visibility: visible; opacity: 1; }
+    .point:hover .tooltip-up { bottom: 140%; }
+    .point:hover .tooltip-down { top: 140%; }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin: 50px 0;
+        }
+        
+        .spec-card {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: var(--card-shadow);
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-container">
+        <a href="../../../index.html" class="logo">
+            <img src="../../../common/Logo_IUT.png" alt="Logo IUT" class="nav-logo-img">
+            <span>PORTFOLIO GMP</span>
+        </a>
+        <ul>
+            <li><a href="../../../index.html">Accueil</a></li>
+            <li><a href="../../../projets.html">Projets</a></li>
+            <li><a href="../../../common/cv.pdf" target="_blank" class="btn-cv">Mon CV</a></li>
+            <li><button id="theme-toggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="container" style="max-width: 1100px; margin: auto; padding: 0 20px;">
+    <header class="hero" style="padding: 60px 0;">
+        <span class="badge">PROJET PERSO</span>
+        <h1>Restauration Pocket Bike</h1>
+        <p class="description">Remise en état mécanique et esthétique.</p>
+    </header>
+
+<div class="bike-explorer">
+    <img src="pocket-bike.png" alt="Pocket Bike" class="main-img">
+    
+    <div class="point p-carbu">
+        <i class="fa-solid fa-wrench"></i> Carbu & Filtre
+        <div class="tooltip tooltip-down">Nettoyage complet aux ultrasons et remplacement du filtre à air.</div>
+    </div>
+
+    <div class="point p-chaine">
+        <i class="fa-solid fa-link"></i> Tendeur de chaîne
+        <div class="tooltip tooltip-up">Installation d'un ressort de tension.</div>
+    </div>
+
+    <div class="point p-corps">
+        <i class="fa-solid fa-spray-can"></i> Carrosserie
+        <div class="tooltip tooltip-up">Ponçage et peinture haute température.</div>
+    </div>
+</div>
+
+    <section class="specs-grid">
+        <div class="spec-card">
+            <i class="fa-solid fa-arrows-up-down"></i>
+            <h3>60 cm</h3>
+            <p>Hauteur</p>
+        </div>
+        <div class="spec-card">
+            <i class="fa-solid fa-gauge-high"></i>
+            <h3>45 km/h</h3>
+            <p>Vitesse GPS</p>
+        </div>
+        <div class="spec-card">
+            <i class="fa-solid fa-droplet"></i>
+            <h3>Mélange 2T</h3>
+            <p>Essence + Huile</p>
+        </div>
+        <div class="spec-card">
+            <i class="fa-solid fa-gear"></i>
+            <h3>Transmission</h3>
+            <p>Chaîne réglée</p>
+        </div>
+    </section>
+</main>
+
+<script>
+    // LE SCRIPT DOIT ÊTRE ICI, À LA FIN
+    const themeBtn = document.getElementById("theme-toggle");
+    const themeIcon = themeBtn.querySelector("i");
+
+    function updateIcon(isLight) {
+        if (isLight) {
+            themeIcon.classList.replace("fa-moon", "fa-sun");
+        } else {
+            themeIcon.classList.replace("fa-sun", "fa-moon");
+        }
+    }
+
+    // Initialisation
+    if (localStorage.getItem("theme") === "light") {
+        document.body.classList.add("light-mode");
+        updateIcon(true);
+    }
+
+    themeBtn.addEventListener("click", () => {
+        const isLight = document.body.classList.toggle("light-mode");
+        localStorage.setItem("theme", isLight ? "light" : "dark");
+        updateIcon(isLight);
+    });
+</script>
+
+</body>
+</html>
