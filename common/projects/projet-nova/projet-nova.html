@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet NOVA | Enzo Sanchez Sartori</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script>
+        if (localStorage.getItem("theme") === "light") {
+            document.documentElement.classList.add("light-mode");
+        }
+    </script>
+    <link rel="stylesheet" href="../../../style/main.css">
+    <link rel="stylesheet" href="../../../style/page.css">
+    <link rel="stylesheet" href="../../../style/responsive.css">
+    <link rel="stylesheet" href="../../../style/ui.css">
+
+    <style>
+        /* ===== VARIABLES NOVA ===== */
+        :root {
+            --nova-accent: #3b82f6;
+            --nova-glow: rgba(59,130,246,0.5);
+            --nova-orange: #f97316;
+            --nova-orange-glow: rgba(249,115,22,0.4);
+            --nova-red: #ef4444;
+            --nova-green: #22c55e;
+        }
+
+        #star-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 1;
+        }
+        .light-mode #star-canvas { opacity: 0.08; }
+        nav, section { position: relative; z-index: 1; }
+
+        /* ===== HERO ===== */
+        .nova-hero {
+            min-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 20px 60px;
+        }
+
+        .nova-eyebrow {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.25em;
+            color: var(--nova-accent);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s ease 0.2s forwards;
+        }
+
+        .nova-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: clamp(4rem, 14vw, 9rem);
+            font-weight: 800;
+            line-height: 0.9;
+            letter-spacing: -4px;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 0.9s ease 0.4s forwards;
+        }
+
+        .nova-title span {
+            display: block;
+            background: linear-gradient(135deg, var(--text-main) 40%, var(--nova-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nova-subtitle {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text-sub);
+            max-width: 560px;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.9s ease 0.6s forwards;
+        }
+
+        .nova-stats {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.9s ease 0.8s forwards;
+            padding: 45px;
+        }
+
+        .nova-stat-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--nova-accent);
+            display: block;
+        }
+
+        .nova-stat-label {
+            font-size: 0.78rem;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .scroll-indicator {
+            
+            bottom: 20px;
+            left: 50%;
+            transform: translateY(50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            animation: fadeUp 1s ease 1.2s forwards;
+        }
+
+        .scroll-indicator span {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            letter-spacing: 0.2em;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
+
+        .scroll-line {
+            width: 3px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--nova-accent), transparent);
+            animation: scrollPulse 2s ease infinite;
+        }
+
+        /* ===== SECTIONS ===== */
+        .section-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            color: var(--nova-accent);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 40px;
+            border-left: 3px solid var(--nova-accent);
+            padding-left: 18px;
+        }
+
+        /* ===== FUSÉES ===== */
+        .rockets-section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .rockets-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .rocket-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .rocket-card.revealed { opacity: 1; transform: translateY(0); }
+        .rocket-card:nth-child(1) { transition-delay: 0s; }
+        .rocket-card:nth-child(2) { transition-delay: 0.12s; }
+        .rocket-card:nth-child(3) { transition-delay: 0.24s; }
+
+        .rocket-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px var(--nova-glow);
+            border-color: rgba(59,130,246,0.3);
+        }
+
+        .rocket-viewer {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: linear-gradient(160deg, rgba(15,23,42,0.8), rgba(30,41,59,0.6));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rocket-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .rocket-card:hover .rocket-photo { transform: scale(1.04); }
+
+        /* L'overlay 3D n'apparaît QUE si la carte a la classe .has-model */
+        .rocket-3d-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(15,23,42,0.82);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(4px);
+            cursor: pointer;
+        }
+        .rocket-card.has-model:hover .rocket-3d-overlay { opacity: 1; }
+        .rocket-3d-overlay i   { font-size: 2rem; color: var(--nova-accent); }
+        .rocket-3d-overlay span {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            color: white;
+            letter-spacing: 0.06em;
+        }
+
+        .rocket-badge {
+            position: absolute;
+            top: 12px; right: 12px;
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+        .badge-fail    { background:rgba(239,68,68,0.15);  color:#f87171; border:1px solid rgba(239,68,68,0.3); }
+        .badge-theory  { background:rgba(250,204,21,0.15); color:#fbbf24; border:1px solid rgba(250,204,21,0.3); }
+        .badge-success { background:rgba(34,197,94,0.15);  color:#4ade80; border:1px solid rgba(34,197,94,0.3); }
+
+        .rocket-number {
+            position: absolute;
+            bottom: 12px; left: 12px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.6);
+            background: rgba(0,0,0,0.45);
+            padding: 3px 8px;
+            border-radius: 5px;
+            backdrop-filter: blur(8px);
+        }
+
+        .rocket-body { padding: 20px; }
+
+        .rocket-name {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .rocket-tagline {
+            font-size: 0.82rem;
+            color: var(--text-sub);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .rocket-specs { display: flex; flex-direction: column; margin-bottom: 12px; }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.8rem;
+        }
+        .light-mode .spec-row { border-bottom-color: rgba(0, 0, 0, 0.06); }
+        .spec-key { color: var(--text-sub); font-family: 'Space Mono', monospace; font-size: 0.68rem; }
+        .spec-val { font-weight: 600; font-size: 0.82rem; }
+
+        .rocket-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+        .rocket-tags span {
+            background: rgba(59,130,246,0.1);
+            color: #60a5fa;
+            padding: 3px 9px;
+            border-radius: 99px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border: 1px solid rgba(59,130,246,0.15);
+        }
+
+        /* ===== PROPERGOL ===== */
+        .propellant-section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .propellant-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .propellant-visual {
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .donut-wrap {
+            position: relative;
+            width: 220px;
+            height: 220px;
+        }
+
+        .donut-wrap svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .donut-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .donut-center span:first-child {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--nova-accent);
+        }
+
+        .donut-center span:last-child {
+            font-size: 1rem;
+            color: rgba(255,222,33,0.85);
+        }
+
+        .propellant-info h3 {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+        }
+
+        .propellant-info p {
+            color: var(--text-sub);
+            font-size: 0.92rem;
+            line-height: 1.75;
+            margin-bottom: 20px;
+        }
+
+        .propellant-formula { display: flex; gap: 12px; flex-wrap: wrap; }
+
+        .formula-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 10px 14px;
+        }
+
+        .formula-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .formula-chip span { font-size: 0.83rem; font-weight: 600; }
+        .formula-chip em { font-style: normal; color: var(--text-sub); font-size: 0.77rem; }
+
+        /* ===== TIMELINE ===== */
+        .timeline-section {
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline { position: relative; padding-left: 28px; }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 8px; bottom: 8px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--nova-accent), rgba(59,130,246,0.1));
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 36px;
+            opacity: 0;
+            transform: translateX(-16px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .timeline-item.revealed { opacity: 1; transform: translateX(0); }
+        .timeline-item:last-child { padding-bottom: 0; }
+
+        .timeline-dot {
+            position: absolute;
+            left: -32px; top: 6px;
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--nova-accent);
+            border: 2px solid var(--bg-body);
+            box-shadow: 0 0 10px var(--nova-glow);
+        }
+        .timeline-dot--orange { background: var(--nova-orange); box-shadow: 0 0 10px var(--nova-orange-glow); }
+        .timeline-dot--green  { background: var(--nova-green);  box-shadow: 0 0 10px rgba(34,197,94,0.5); }
+
+        .timeline-date {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-sub);
+            letter-spacing: 0.1em;
+            margin-bottom: 4px;
+        }
+
+        .timeline-event {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .timeline-desc {
+            font-size: 0.88rem;
+            color: var(--text-sub);
+            line-height: 1.65;
+        }
+
+        /* ===== OLYMPIADES ===== */
+        .olympiad-section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .olympiad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .olympiad-card {
+            background: var(--bg-card);
+            border-radius: 18px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
+        }
+        .olympiad-card.revealed { opacity: 1; transform: translateY(0); }
+        .olympiad-card:nth-child(1) { transition-delay: 0s; }
+        .olympiad-card:nth-child(2) { transition-delay: 0.1s; }
+        .olympiad-card:nth-child(3) { transition-delay: 0.2s; }
+        .olympiad-card:hover { box-shadow: 0 12px 30px var(--nova-glow); }
+
+        .olympiad-card i {
+            font-size: 1.6rem;
+            color: var(--nova-accent);
+            background: rgba(59,130,246,0.1);
+            width: 46px; height: 46px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 12px;
+            border: 1px solid rgba(59,130,246,0.2);
+            margin-bottom: 14px;
+        }
+
+        .olympiad-card h4 {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .olympiad-card p { font-size: 0.85rem; color: var(--text-sub); line-height: 1.6; }
+
+        .memoire-cta {
+            background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(59,130,246,0.04));
+            border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 18px;
+            padding: 26px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .memoire-cta div h4 {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .memoire-cta div p { font-size: 0.85rem; color: var(--text-sub); }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 22px;
+            border-radius: 11px;
+            border: 1.5px solid var(--nova-accent);
+            color: var(--nova-accent) !important;
+            font-weight: 700;
+            font-size: 0.88rem;
+            white-space: nowrap;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        .btn-outline:hover { background: rgba(59,130,246,0.1); transform: translateY(-2px); }
+
+        /* ===== POSTERS ===== */
+        .gallery-section {
+            padding: 60px 20px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 2 colonnes côte à côte, hauteur naturelle des images */
+        .posters-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .poster-item {
+            border-radius: 14px;
+            overflow: hidden;
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .poster-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 40px var(--nova-glow);
+        }
+
+        /* L'image prend toute la largeur, hauteur naturelle (pas d'aspect-ratio forcé) */
+        .poster-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .poster-item:hover img { transform: scale(1.02); }
+
+        .poster-caption {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+        .light-mode .poster-caption { border-top-color: rgba(0,0,0,0.05); }
+
+        .poster-caption i { font-size: 0.82rem; color: var(--nova-accent); }
+        .poster-caption span {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-sub);
+        }
+
+        /* ===== RETOUR ===== */
+        .nova-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            color: var(--text-sub);
+            margin: 20px 20px 60px;
+            transition: color 0.3s ease;
+        }
+        .nova-back:hover { color: var(--nova-accent); }
+
+        .light-mode {
+    --bg-body: #a0d9ff28; /* Un bleu ciel très léger */
+    background-color: var(--bg-body);
+}
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .rockets-grid, .olympiad-grid { grid-template-columns: 1fr 1fr; }
+            .propellant-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .rockets-grid, .olympiad-grid, .posters-grid { grid-template-columns: 1fr; }
+            .nova-stats { gap: 20px; }
+            .memoire-cta { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="star-canvas"></canvas>
+
+<nav>
+    <div class="nav-container">
+        <a href="../../../index.html" class="logo">
+            <img src="../../../common/Logo_IUT.png" alt="Logo IUT" class="nav-logo-img">
+            <span>PORTFOLIO GMP</span>
+        </a>
+        <ul>
+            <li><a href="../../../index.html">Accueil</a></li>
+            <li><a href="../../../competences.html">Compétences</a></li>
+            <li><a href="../../../projets.html">Projets</a></li>
+            <li><a href="../../../common/cv.pdf" target="_blank" class="btn-cv">Mon CV</a></li>
+            <li><button id="theme-toggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="nova-hero">
+    <p class="nova-eyebrow">Projet Personnel &nbsp;/&nbsp; Rocketry Amateur</p>
+    <h1 class="nova-title"><span>NOVA</span></h1>
+    <p class="nova-subtitle">
+        Une fusée construite de A à Z — propergol artisanal, électronique embarquée,
+        parachute cousu main. Finalistes aux Olympiades de la Physique à Marseille.
+    </p>
+    <div class="nova-stats">
+        <div class="nova-stat">
+            <span class="nova-stat-value">3</span>
+            <span class="nova-stat-label">Fusées</span>
+        </div>
+        <div class="nova-stat">
+            <span class="nova-stat-value">~1m</span>
+            <span class="nova-stat-label">Hauteur NOVA EE</span>
+        </div>
+        <div class="nova-stat">
+            <span class="nova-stat-value">~20m</span>
+            <span class="nova-stat-label">Altitude NOVA III</span>
+        </div>
+        <div class="nova-stat">
+            <span class="nova-stat-value">3 ans</span>
+            <span class="nova-stat-label">Durée du projet</span>
+        </div>
+    </div>
+    <div class="scroll-indicator">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<!-- ===== LES 3 FUSÉES ===== -->
+<section class="rockets-section">
+    <p class="section-label">Les modèles</p>
+    <h2 class="section-title">Trois générations de NOVA</h2>
+
+    <div class="rockets-grid">
+
+        <!-- NOVA MINI
+             Pour activer le viewer 3D au hover :
+             1. Ajoute "has-model" à la classe de cette div
+             2. Lis les instructions en bas du fichier (section MODÈLES 3D)
+        -->
+        <div class="rocket-card" data-reveal>
+            <div class="rocket-viewer">
+                <img class="rocket-photo" src="nova-mini.png" alt="NOVA Mini">
+                <span class="rocket-badge badge-fail">Échec décollage</span>
+                <span class="rocket-number">01 / NOVA MINI</span>
+                <div class="rocket-3d-overlay">
+                    <i class="fa-solid fa-cube"></i>
+                    <span>Modèle 3D disponible</span>
+                </div>
+            </div>
+            <div class="rocket-body">
+                <h3 class="rocket-name">NOVA Mini</h3>
+                <p class="rocket-tagline">Premier prototype 100% imprimé 3D. Le châssis PLA ne résiste pas aux contraintes au décollage.</p>
+                <div class="rocket-specs">
+                    <div class="spec-row">
+                        <span class="spec-key">Hauteur</span>
+                        <span class="spec-val">≈ 20 cm</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-key">Châssis</span>
+                        <span class="spec-val">PLA imprimé 3D</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-key">Résultat</span>
+                        <span class="spec-val" style="color:#f87171;">Pas de décollage</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-key">Enseignement</span>
+                        <span class="spec-val">Rigidité insuffisante</span>
+                    </div>
+                </div>
+                <div class="rocket-tags">
+                    <span>Impression 3D</span>
+                    <span>Fusion 360</span>
+                    <span>Propergol solide</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOVA EE -->
+        <div class="rocket-card" data-reveal>
+            <div class="rocket-viewer">
+                <img class="rocket-photo" src="nova-ee.png" alt="NOVA EE">
+                <span class="rocket-badge badge-theory">Olympiades</span>
+                <span class="rocket-number">02 / NOVA EE</span>
+                <div class="rocket-3d-overlay">
+                    <i class="fa-solid fa-cube"></i>
+                    <span>Modèle 3D disponible</span>
+                </div>
+            </div>
+            <div class="rocket-body">
+                <h3 class="rocket-name">NOVA EE</h3>
+                <p class="rocket-tagline">La fusée des Olympiades — 1m, ordinateur de bord, parachute, ailerons. Présentée à des ingénieurs à Marseille.</p>
+                <div class="rocket-specs">
+                    <div class="spec-row">
+                        <span class="spec-key">Hauteur</span>
+                        <span class="spec-val">≈ 1 mètre</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-key">Électronique</span>
+                        <span class="spec-val" style="color:#60a5fa;">Ordinateur de bord</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-key">Châssis</span>
+                        <span class="spec-val">Carton renforcé</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-key">Résultat</span>
+                        <span class="spec-val" style="color:#fbbf24;">Finaliste — théorique</span>
+                    </div>
+                </div>
+                <div class="rocket-tags">
+                    <span>Électronique</span>
+                    <span>Parachute</span>
+                    <span>Fusion 360</span>
+                    <span>Finaliste</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOVA III -->
+        <div class="rocket-card" data-reveal>
+            <div class="rocket-viewer">
+                <img class="rocket-photo" src="nova-iii.png" alt="NOVA III">
+                <span class="rocket-badge badge-success">Décollage ✓</span>
+                <span class="rocket-number">03 / NOVA III</span>
+                <div class="rocket-3d-overlay">
+                    <i class="fa-solid fa-cube"></i>
+                    <span>Modèle 3D disponible</span>
+                </div>
+            </div>
+            <div class="rocket-body">
+                <h3 class="rocket-name">NOVA III</h3>
+                <p class="rocket-tagline">La réussite. Décollage à ≈20m. Moteur 100% imprimé 3D, parachute cousu main avec une toile de récupération.</p>
+                <div class="rocket-specs">
+                    <div class="spec-row">
+                        <span class="spec-key">Altitude</span>
+                        <span class="spec-val" style="color:#4ade80;">≈ 20 mètres</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-key">Moteur</span>
+                        <span class="spec-val" style="color:#4ade80;">100% imprimé 3D</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-key">Récupération</span>
+                        <span class="spec-val">Parachute cousu main</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-key">Résultat</span>
+                        <span class="spec-val" style="color:#4ade80;">✓ Décollage réussi</span>
+                    </div>
+                </div>
+                <div class="rocket-tags">
+                    <span>Moteur 3D</span>
+                    <span>Parachute</span>
+                    <span>Couture</span>
+                    <span>Succès</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ===== PROPERGOL ===== -->
+<section class="propellant-section">
+    <p class="section-label">Le carburant</p>
+    <h2 class="section-title">Propergol solide artisanal</h2>
+
+    <div class="propellant-grid">
+        <div class="propellant-visual">
+            <div class="donut-wrap">
+                <svg viewBox="0 0 220 220">
+                    <circle cx="110" cy="110" r="80" fill="none"
+                        stroke="rgba(250,204,21,0.8)" stroke-width="28"
+                        stroke-dasharray="301 502" stroke-dashoffset="0"/>
+                    <circle cx="110" cy="110" r="80" fill="none"
+                        stroke="rgba(59,130,246,0.8)" stroke-width="28"
+                        stroke-dasharray="201 502" stroke-dashoffset="-301"/>
+                </svg>
+                <div class="donut-center">
+                    <span>KNO₃</span>
+                    <span>+ Sucre</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="propellant-info">
+            <h3>Un propergol fait maison</h3>
+            <p>
+                Depuis le premier vol, nous utilisons le même mélange : du nitrate de potassium
+                et du sucre, chauffés ensemble jusqu'à former un caramel qui se solidifie en
+                refroidissant. Devient alors un propergol solide inflammable.
+                Simple, mais efficace pour une fusée amateur.
+            </p>
+            <div class="propellant-formula">
+                <div class="formula-chip">
+                    <div class="formula-dot" style="background:#fbbf24;"></div>
+                    <div><span>Sucre</span><br><em>60 %</em></div>
+                </div>
+                <div class="formula-chip">
+                    <div class="formula-dot" style="background:#60a5fa;"></div>
+                    <div><span>KNO₃</span><br><em>40 %</em></div>
+                </div>
+                <div class="formula-chip">
+                    <div class="formula-dot" style="background:#f97316;"></div>
+                    <div><span>Chauffé → caramel</span><br><em>Se solidifie</em></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== TIMELINE ===== -->
+<section class="timeline-section">
+    <p class="section-label">Chronologie</p>
+    <h2 class="section-title" style="padding-left:18px;">3 ans, 3 fusées</h2>
+
+    <div class="timeline">
+        <div class="timeline-item" data-reveal>
+            <div class="timeline-dot"></div>
+            <p class="timeline-date">Année 1</p>
+            <h3 class="timeline-event">NOVA Mini — Le premier prototype</h3>
+            <p class="timeline-desc">Construction du premier modèle entièrement en impression 3D. Tentative de décollage sans succès : le châssis PLA ne résiste pas aux contraintes de poussée. Cet échec nous a mis un coup au moral — on a attendu longtemps avant de reprendre.</p>
+        </div>
+
+        <div class="timeline-item" data-reveal>
+            <div class="timeline-dot timeline-dot--orange"></div>
+            <p class="timeline-date">Année 2</p>
+            <h3 class="timeline-event">NOVA EE — L'électronique embarquée</h3>
+            <p class="timeline-desc">Conception de la fusée des Olympiades : 1m de haut, ordinateur de bord, système de parachute, châssis carton. Notre professeur nous inscrit aux Olympiades de la Physique.</p>
+        </div>
+
+        <div class="timeline-item" data-reveal>
+            <div class="timeline-dot timeline-dot--orange"></div>
+            <p class="timeline-date">Année 2 — Suite</p>
+            <h3 class="timeline-event">Finalistes aux Olympiades de la Physique — Marseille</h3>
+            <p class="timeline-desc">Rédaction d'un mémoire de 20 pages, réalisation de deux posters (minimaliste + technique). Présentation devant des ingénieurs à Marseille.</p>
+        </div>
+
+        <div class="timeline-item" data-reveal>
+            <div class="timeline-dot timeline-dot--green"></div>
+            <p class="timeline-date">Année 3</p>
+            <h3 class="timeline-event">NOVA III — Premier décollage réussi 🚀</h3>
+            <p class="timeline-desc">Moteur 100% imprimé en 3D, parachute cousu main avec une toile de récupération. NOVA III décolle et atteint ≈20 mètres. Objectif atteint.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===== OLYMPIADES ===== -->
+<section class="olympiad-section">
+    <p class="section-label">Compétition nationale</p>
+    <h2 class="section-title">Olympiades de la Physique</h2>
+
+    <div class="olympiad-grid">
+        <div class="olympiad-card" data-reveal>
+            <i class="fa-solid fa-trophy"></i>
+            <h4>Finalistes nationaux</h4>
+            <p>Sélectionnés parmi les meilleurs projets de France pour présenter notre fusée à Marseille devant un jury d'ingénieurs.</p>
+        </div>
+        <div class="olympiad-card" data-reveal>
+            <i class="fa-solid fa-file-lines"></i>
+            <h4>Mémoire de 20 pages</h4>
+            <p>Rédaction d'un dossier complet : conception, calculs, propulsion, sécurité et résultats expérimentaux.</p>
+        </div>
+        <div class="olympiad-card" data-reveal>
+            <i class="fa-solid fa-image"></i>
+            <h4>Deux posters de présentation</h4>
+            <p>Un poster minimaliste avec la fusée au centre, et un poster technique avec annotations de chaque sous-système.</p>
+        </div>
+    </div>
+
+    <div class="memoire-cta">
+        <div>
+            <h4><i class="fa-solid fa-file-pdf" style="color:var(--nova-accent);margin-right:8px;"></i>Mémoire complet — Olympiades de la Physique</h4>
+            <p>20 pages détaillant la conception, la propulsion et les résultats de NOVA EE.</p>
+        </div>
+        <a href="memoire-nova.pdf" class="btn-outline">
+            <i class="fa-solid fa-download"></i> Télécharger le mémoire
+        </a>
+    </div>
+</section>
+
+<!-- ===== POSTERS CÔTE À CÔTE ===== -->
+<section class="gallery-section">
+    <p class="section-label">Présentation Olympiades</p>
+    <h2 class="section-title">Les deux posters</h2>
+
+    <div class="posters-grid">
+        <div class="poster-item">
+            <img src="3.png" alt="Poster technique NOVA EE">
+            <div class="poster-caption">
+                <i class="fa-solid fa-drafting-compass"></i>
+                <span>Poster technique — Annotations sous-systèmes</span>
+            </div>
+        </div>
+
+        <div class="poster-item">
+            <img src="1.png" alt="Poster minimaliste NOVA EE">
+            <div class="poster-caption">
+                <i class="fa-solid fa-star"></i>
+                <span>Poster minimaliste — Fusée au centre</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<a href="../../../projets.html" class="nova-back">
+    <i class="fa-solid fa-arrow-left"></i> Retour aux projets
+</a>
+
+<a href="#" id="back-top" class="back-btn-floating" aria-label="Retour en haut">
+    <i class="fa-solid fa-chevron-up"></i>
+</a>
+
+<script>
+/* --- THÈME --- */
+const btn = document.getElementById("theme-toggle");
+const icon = btn.querySelector("i");
+function updateIcon() {
+    icon.className = document.documentElement.classList.contains("light-mode")
+        ? "fa-solid fa-sun" : "fa-solid fa-moon";
+}
+updateIcon();
+btn.addEventListener("click", () => {
+    const isLight = document.documentElement.classList.toggle("light-mode");
+    localStorage.setItem("theme", isLight ? "light" : "dark");
+    updateIcon();
+});
+
+/* --- CANVAS ÉTOILES --- */
+(function() {
+    const canvas = document.getElementById("star-canvas");
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    function generateStars(n) {
+        stars = [];
+        for (let i = 0; i < n; i++) {
+            stars.push({
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                r: Math.random() * 1.4 + 0.2, alpha: Math.random() * 0.6 + 0.2,
+                speed: Math.random() * 0.003 + 0.001, phase: Math.random() * Math.PI * 2
+            });
+        }
+    }
+    let frame = 0;
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        frame++;
+        stars.forEach(s => {
+            const a = s.alpha * (0.6 + 0.4 * Math.sin(frame * s.speed + s.phase));
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,${a})`;
+            ctx.fill();
+        });
+        requestAnimationFrame(draw);
+    }
+    resize(); generateStars(160); draw();
+    window.addEventListener("resize", () => { resize(); generateStars(160); });
+})();
+
+/* --- SCROLL REVEAL --- */
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add("revealed"); });
+}, { threshold: 0.1 });
+
+document.querySelectorAll("[data-reveal], .rocket-card, .olympiad-card, .timeline-item").forEach(el => {
+    revealObserver.observe(el);
+});
+
+/* --- RETOUR EN HAUT --- */
+const backBtn = document.getElementById("back-top");
+window.addEventListener("scroll", () => { backBtn.classList.toggle("visible", window.scrollY > 400); });
+backBtn.addEventListener("click", e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); });
+</script>
+
+<!--
+=================================================================
+  INTÉGRATION MODÈLES 3D GLB — Instructions étape par étape
+=================================================================
+
+TU AS DES FICHIERS GLB ? Voici exactement quoi faire :
+
+ÉTAPE 1 — Place tes fichiers GLB dans le même dossier que cette page.
+  Par exemple : nova-mini.glb, nova-ee.glb, nova-iii.glb
+
+ÉTAPE 2 — Sur chaque .rocket-card, ajoute la classe "has-model" :
+  AVANT :  <div class="rocket-card" data-reveal>
+  APRÈS :  <div class="rocket-card has-model" data-reveal>
+  → L'overlay bleu "Modèle 3D disponible" apparaîtra au survol de la photo.
+
+ÉTAPE 3 — Sur chaque .rocket-3d-overlay, ajoute onclick :
+  AVANT :  <div class="rocket-3d-overlay">
+  APRÈS :  <div class="rocket-3d-overlay" onclick="open3D('nova-mini.glb')">
+           (adapter le nom du fichier pour chaque carte)
+
+ÉTAPE 4 — Ajoute ces deux lignes dans le <head> de la page :
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+ÉTAPE 5 — Ajoute cette fonction dans le bloc <script> existant :
+
+function open3D(modelFile) {
+    const modal = document.createElement('div');
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:pointer;';
+    const canvas3d = document.createElement('canvas');
+    canvas3d.style.cssText = 'width:min(600px,90vw);height:min(600px,80vh);';
+    modal.appendChild(canvas3d);
+    modal.addEventListener('click', e => { if(e.target===modal) document.body.removeChild(modal); });
+    document.body.appendChild(modal);
+
+    const w = canvas3d.offsetWidth, h = canvas3d.offsetHeight;
+    const renderer = new THREE.WebGLRenderer({ canvas:canvas3d, alpha:true, antialias:true });
+    renderer.setSize(w, h); renderer.setPixelRatio(window.devicePixelRatio);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, w/h, 0.1, 100);
+    camera.position.set(0, 0, 4);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+    const dl = new THREE.DirectionalLight(0x3b82f6, 1.5);
+    dl.position.set(2, 4, 3); scene.add(dl);
+
+    new THREE.GLTFLoader().load(modelFile, gltf => {
+        const obj = gltf.scene;
+        const box = new THREE.Box3().setFromObject(obj);
+        const size = box.getSize(new THREE.Vector3()).length();
+        camera.position.z = size * 2;
+        const center = box.getCenter(new THREE.Vector3());
+        obj.position.sub(center);
+        scene.add(obj);
+        (function animate() {
+            if (!document.body.contains(modal)) return;
+            requestAnimationFrame(animate);
+            obj.rotation.y += 0.008;
+            renderer.render(scene, camera);
+        })();
+    });
+}
+
+C'est tout ! Au clic sur l'overlay, une modale s'ouvre avec le modèle 3D
+qui tourne automatiquement. Clic en dehors = fermeture.
+=================================================================
+-->
+</body>
+</html>

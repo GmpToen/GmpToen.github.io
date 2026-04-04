@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compétences | Enzo Sanchez Sartori</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        if (localStorage.getItem("theme") === "light") {
+            document.documentElement.classList.add("light-mode");
+        }
+    </script>
+    <link rel="stylesheet" href="style/main.css">
+    <link rel="stylesheet" href="style/page.css">
+    <link rel="stylesheet" href="style/perso1.CSS">
+    <link rel="stylesheet" href="style/responsive.css">
+    <link rel="stylesheet" href="style/ui.css">
+    <link rel="stylesheet" href="style/competences.css">
+</head>
+<body>
+
+<nav>
+    <div class="nav-container">
+        <a href="index.html" class="logo">
+            <img src="common/Logo_IUT.png" alt="Logo IUT" class="nav-logo-img">
+            <span>PORTFOLIO GMP</span>
+        </a>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="competences.html" class="active">Compétences</a></li>
+            <li><a href="projets.html">Projets</a></li>
+            <li><a href="common/cv.pdf" target="_blank" class="btn-cv">Mon CV</a></li>
+            <li><button id="theme-toggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" style="padding: 100px 20px 40px;">
+    <div class="hero-content">
+        <span class="badge">SAVOIR-FAIRE</span>
+        <h1>Mes Compétences</h1>
+        <p class="subtitle">Techniques, logiciels et soft skills acquis en BUT GMP
+            les pourcentage sont un avis auto-proclamé
+        </p>
+    </div>
+</header>
+
+<main class="comp-main">
+
+    <!-- ===== SECTION CAO ===== -->
+    <section class="comp-section" id="cao">
+        <div class="section-header">
+            <div class="section-icon"><i class="fa-solid fa-gear"></i></div>
+            <div>
+                <h2>Conception Assistée par Ordinateur</h2>
+                <p class="section-desc">Modélisation 3D, mise en plan et assemblages complexes</p>
+            </div>
+        </div>
+
+        <div class="comp-cards-grid">
+
+            <div class="comp-card comp-card--featured">
+                <div class="comp-card-header">
+                    <div class="comp-logo-wrap">
+                        <i class="fa-solid fa-cube"></i>
+                    </div>
+                    <div>
+                        <h3>SolidWorks / Fusion 360</h3>
+                        <span class="comp-level comp-level--advanced">Intermédiaire</span>
+                    </div>
+                </div>
+                <p class="comp-desc">Modélisation de pièces, assemblages paramétriques et mise en plan normalisée ISO.</p>
+                <div class="comp-bar-wrap">
+                    <div class="comp-bar"><div class="comp-bar-fill" data-width="80"></div></div>
+                    <span>80%</span>
+                </div>
+                <div class="comp-tags">
+                    <span>Esquisse 2D</span>
+                    <span>Assemblage</span>
+                    <span>Mise en plan</span>
+                    <span>Contrat de phase</span>
+                </div>
+            </div>
+
+            <div class="comp-card">
+                <div class="comp-card-header">
+                    <div class="comp-logo-wrap comp-logo-wrap--sm">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <div>
+                        <h3>Modelisation 3D / Mise en plan</h3>
+                        <span class="comp-level comp-level--advanced">Intermédiaire</span>
+                    </div>
+                </div>
+                <p class="comp-desc">Conception de pièces mécaniques à partir de cahiers des charges, cotation fonctionnelle.</p>
+                <div class="comp-tags">
+                    <span>Cotation ISO</span>
+                    <span>Tolérancement</span>
+                </div>
+            </div>
+
+            <div class="comp-card">
+                <div class="comp-card-header">
+                    <div class="comp-logo-wrap comp-logo-wrap--sm">
+                        <i class="fa-solid fa-print"></i>
+                    </div>
+                    <div>
+                        <h3>Impression 3D FDM</h3>
+                        <span class="comp-level comp-level--advanced">Maîtrisé</span>
+                    </div>
+                </div>
+                <p class="comp-desc">Paramétrage de l'impression, choix des matériaux (PLA, PETG), maintenance de l'imprimante.</p>
+                <div class="comp-tags">
+                    <span>Cura / Bambu studio</span>
+                    <span>PLA / PETG</span>
+                    <span>Calibration</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===== SECTION INDUSTRIALISATION ===== -->
+    <section class="comp-section" id="indus">
+        <div class="section-header">
+            <div class="section-icon"><i class="fa-solid fa-microchip"></i></div>
+            <div>
+                <h2>Industrialisation & Procédés</h2>
+                <p class="section-desc">Gammes de fabrication, Indicateur, Gestion atelier</p>
+            </div>
+        </div>
+
+        <div class="comp-cards-grid">
+
+            <div class="comp-card comp-card--featured">
+                <div class="comp-card-header">
+                    <div class="comp-logo-wrap">
+                        <i class="fa-solid fa-sitemap"></i>
+                    </div>
+                    <div>
+                        <h3>Gammes de Fabrication</h3>
+                        <span class="comp-level comp-level--intermediate">Intermédiaire</span>
+                    </div>
+                </div>
+                <p class="comp-desc">Rédaction de gammes d'usinage, choix des procédés, des outils coupants calcul vitesse. <strong>Voir SAE 2.3</strong> </p>
+                <div class="comp-bar-wrap">                    <div class="comp-bar"><div class="comp-bar-fill" data-width="70"></div></div>
+                    <span>70%</span>
+                </div>
+                <div class="comp-tags">
+                    <span>Tournage</span>
+                    <span>Fraisage</span>
+                    <span>Contrat de phase</span>
+                </div>
+            </div>
+
+            <div class="comp-card">
+                <div class="comp-card-header">
+                    <div class="comp-logo-wrap comp-logo-wrap--sm">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <h3>Indicateur</h3>
+                        <span class="comp-level comp-level--beginner">Débutant</span>
+                    </div>
+                </div>
+                <p class="comp-desc">Calcul des Top, Tcyeff, charge, takt et fiche de suivie pour l'usinage d'une phase. <strong>Voir SAE 2.3</strong></p>
+                <div class="comp-tags">
+                    <span>Calcul</span>
+                    <span>compréhension</span>
+                </div>
+            </div>
+
+            <div class="comp-card">
+                <div class="comp-card-header">
+                    <div class="comp-logo-wrap comp-logo-wrap--sm">
+                        <i class="fa-solid fa-map"></i>
+                    </div>
+                    <div>
+                        <h3>Implantation d'Atelier</h3>
+                        <span class="comp-level comp-level--intermediate">Intermédiaire</span>
+                    </div>
+                </div>
+                <p class="comp-desc">Étude des flux de production, optimisation des déplacements et des postes de travail (méthode 5S).</p>
+                <div class="comp-tags">
+                    <span>Gestion</span>
+                    <span>Flux</span>
+                    <span>Charge</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===== SECTION ATELIER ===== -->
+    <section class="comp-section" id="atelier">
+        <div class="section-header">
+            <div class="section-icon"><i class="fa-solid fa-hammer"></i></div>
+            <div>
+                <h2>Usinage & Atelier</h2>
+                <p class="section-desc">Machines conventionnelles, CN et Mesure / Contrôle </p>
+            </div>
+        </div>
+
+        <div class="comp-cards-grid">
+
+            <div class="comp-card comp-card--featured">
+                <div class="comp-card-header">
+                    <div class="comp-logo-wrap">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                    </div>
+                    <div>
+                        <h3>Usinage Conventionnel</h3>
+                        <span class="comp-level comp-level--intermediate">Avancé</span>
+                    </div>
+                </div>
+                <p class="comp-desc">Tour et fraiseuse conventionnels : dressage, chariotage, perçage, fraisage de profil.</p>
+                <div class="comp-bar-wrap">
+                    <div class="comp-bar"><div class="comp-bar-fill" data-width="75"></div></div>
+                    <span>75%</span>
+                </div>
+                <div class="comp-tags">
+                    <span>Tournage</span>
+                    <span>Fraisage</span>
+                    <span>Perçage</span>
+                </div>
+            </div>
+
+            <div class="comp-card">
+                <div class="comp-card-header">
+                    <div class="comp-logo-wrap comp-logo-wrap--sm">
+                        <i class="fa-solid fa-terminal"></i>
+                    </div>
+                    <div>
+                        <h3>CN & FAO</h3>
+                        <span class="comp-level comp-level--beginner">Débutant</span>
+                    </div>
+                </div>
+                <p class="comp-desc">Programmation d'une CN et à la FAO via TopSolide.</p>
+                <div class="comp-tags">
+                    <span>G-Code</span>
+                    <span>TopSolide</span>
+                </div>
+            </div>
+
+            <div class="comp-card">
+                <div class="comp-card-header">
+                    <div class="comp-logo-wrap comp-logo-wrap--sm">
+                        <i class="fa-solid fa-ruler-combined"></i>
+                    </div>
+                    <div>
+                        <h3>Métrologie</h3>
+                        <span class="comp-level comp-level--intermediate">Intermédiaire</span>
+                    </div>
+                </div>
+                <p class="comp-desc">Contrôle dimensionnel avec pied à coulisse, micromètre, comparateur et machine à mesurer.</p>
+                <div class="comp-tags">
+                    <span>Pied à coulisse</span>
+                    <span>Micromètre</span>
+                    <span>MMT</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===== SECTION SOFT SKILLS ===== -->
+    <section class="comp-section" id="soft">
+        <div class="section-header">
+            <div class="section-icon"><i class="fa-solid fa-users"></i></div>
+            <div>
+                <h2>Savoir-être</h2>
+                <p class="section-desc">Qualités humaines et professionnelles développées en formation</p>
+            </div>
+        </div>
+
+        <div class="soft-grid">
+            <div class="soft-card">
+                <i class="fa-solid fa-lightbulb"></i>
+                <h4>Curiosité</h4>
+                <p>Passion pour comprendre le fonctionnement des systèmes mécaniques et résoudre des problèmes complexes.</p>
+            </div>
+            <div class="soft-card">
+                <i class="fa-solid fa-users"></i>
+                <h4>Travail en équipe</h4>
+                <p>Nombreuses SAE réalisées en groupe, communication et répartition des tâches. Groupe de deux minimum en SAE</p>
+            </div>
+            <div class="soft-card">
+                <i class="fa-solid fa-clock"></i>
+                <h4>Autonomie</h4>
+                <p>Capacité pratiquer à organiser mon travail et mes rechercher pour les SAE de manière indépendante.</p>
+            </div>
+            <div class="soft-card">
+                <i class="fa-solid fa-file-lines"></i>
+                <h4>Rédaction technique</h4>
+                <p>Rédaction de rapports, comptes-rendus de TP et Excel notament grace a nos nombreux cours d'informatique. </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="comp-cta">
+        <h2>Intéressé par mon profil ?</h2>
+        <p>Je recherche une alternance en Usinage, Bureau d'études ou Maintenance.</p>
+        <div class="cta-btns">
+            <a href="contact.html" class="btn-primary">Me contacter <i class="fa-solid fa-paper-plane"></i></a>
+            <a href="common/cv.pdf" target="_blank" class="btn-secondary">Télécharger mon CV <i class="fa-solid fa-download"></i></a>
+        </div>
+    </section>
+
+</main>
+
+<!-- Bouton retour en haut -->
+<a href="#" id="back-top" class="back-btn-floating" aria-label="Retour en haut">
+    <i class="fa-solid fa-chevron-up"></i>
+</a>
+
+<script>
+    // Thème
+    const btn = document.getElementById("theme-toggle");
+    const icon = btn.querySelector("i");
+    function updateIcon() {
+        if (document.documentElement.classList.contains("light-mode")) {
+            icon.className = "fa-solid fa-sun";
+        } else {
+            icon.className = "fa-solid fa-moon";
+        }
+    }
+    updateIcon();
+    btn.addEventListener("click", () => {
+        const isLight = document.documentElement.classList.toggle("light-mode");
+        localStorage.setItem("theme", isLight ? "light" : "dark");
+        updateIcon();
+    });
+
+    // Barre de progression animée au scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const bar = entry.target;
+                const width = bar.getAttribute("data-width");
+                bar.style.width = width + "%";
+                observer.unobserve(bar);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll(".comp-bar-fill").forEach(bar => {
+        observer.observe(bar);
+    });
+
+    // Bouton retour en haut
+    const backBtn = document.getElementById("back-top");
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+            backBtn.classList.add("visible");
+        } else {
+            backBtn.classList.remove("visible");
+        }
+    });
+    backBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+</script>
+</body>
+</html>
