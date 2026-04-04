@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impression 3D | Enzo Sanchez Sartori</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        if (localStorage.getItem("theme") === "light") {
+            document.documentElement.classList.add("light-mode");
+        }
+    </script>
+    <link rel="stylesheet" href="../../../style/main.css">
+    <link rel="stylesheet" href="../../../style/page.css">
+    <link rel="stylesheet" href="../../../style/responsive.css">
+    <link rel="stylesheet" href="../../../style/ui.css">
+
+    <style>
+        /* ===== VARIABLES ===== */
+        :root {
+            --fdm-green:  #22c55e;
+            --fdm-green-glow: rgba(34,197,94,0.35);
+            --fdm-amber: #f59e0b;
+            --fdm-amber-glow: rgba(245,158,11,0.35);
+        }
+
+        * { box-sizing: border-box; }
+        html, body { overflow-x: hidden; }
+
+        /* ===== CANVAS FOND ===== */
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        .light-mode #bg-canvas { opacity: 0.06; }
+        nav, main, header, section, footer { position: relative; z-index: 1; }
+
+        /* ===== HERO ===== */
+        .fdm-hero {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            padding: 100px 5% 60px;
+            max-width: 1300px;
+            margin:  auto;
+        }
+
+        .hero-text { flex: 1; max-width: 520px; }
+
+        .fdm-eyebrow {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--fdm-green);
+            margin-bottom: 18px;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: fadeUp 0.7s ease 0.2s forwards;
+        }
+
+        .fdm-title {
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 22px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s ease 0.35s forwards;
+        }
+
+        .fdm-title em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--fdm-green), #86efac);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .fdm-sub {
+            color: var(--text-sub);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 36px;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: fadeUp 0.8s ease 0.5s forwards;
+        }
+
+        .fdm-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: fadeUp 0.8s ease 0.65s forwards;
+        }
+
+        .fdm-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 14px;
+            border-radius: 99px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            border: 1px solid;
+        }
+        .fdm-badge--green {
+            background: rgba(34,197,94,0.1);
+            color: var(--fdm-green);
+            border-color: rgba(34,197,94,0.25);
+        }
+        .fdm-badge--blue {
+            background: rgba(59,130,246,0.1);
+            color: #60a5fa;
+            border-color: rgba(59,130,246,0.25);
+        }
+        .fdm-badge--amber {
+            background: rgba(245,158,11,0.1);
+            color: var(--fdm-amber);
+            border-color: rgba(245,158,11,0.25);
+        }
+
+        /* ===== CANVAS 3D HERO ===== */
+        #printer-canvas {
+            flex: 1;
+            max-width: 560px;
+            width: 100%;
+            aspect-ratio: 1;
+            opacity: 0;
+            animation: fadeIn 1.2s ease 0.8s forwards;
+            cursor: grab;
+        }
+        #printer-canvas:active { cursor: grabbing; }
+.scroll-hint {
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+    /* On force le centrage dès le départ */
+    transform: translateX(-50%); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    /* On utilise notre nouvelle animation dédiée */
+    animation: scrollFadeUp 1s ease 1.4s forwards;
+    width: max-content;
+    z-index: 10;
+}
+        .scroll-hint span {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-sub);
+        }
+        .scroll-line {
+            width: 2px;
+            height: 36px;
+            background: linear-gradient(to bottom, var(--fdm-green), transparent);
+            animation: pulse-line 2s ease infinite;
+        }
+
+        /* ===== SCROLL SECTIONS ===== */
+        .scroll-section {
+            padding: 80px 5%;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ===== MACHINES COMPARAISON ===== */
+        .machines-section {
+            padding: 80px 5%;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--fdm-green);
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 40px;
+            border-left: 3px solid var(--fdm-green);
+            padding-left: 18px;
+        }
+
+        .machines-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .machine-card {
+            background: var(--bg-card);
+            border-radius: 22px;
+            padding: 36px 32px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .machine-card.revealed { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+        .machine-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px var(--primary-glow); border-color: rgba(59,130,246,0.3); }
+
+        .machine-card--current {
+            border-color: rgba(34,197,94,0.2);
+            background: linear-gradient(135deg, var(--bg-card), rgba(34,197,94,0.03));
+        }
+        .machine-card--current:hover { box-shadow: 0 20px 40px var(--fdm-green-glow); border-color: rgba(34,197,94,0.4); }
+
+        .machine-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+        .machine-status--active {
+            background: rgba(34,197,94,0.12);
+            color: var(--fdm-green);
+            border: 1px solid rgba(34,197,94,0.25);
+        }
+        .machine-status--inactive {
+            background: rgba(148,163,184,0.1);
+            color: #94a3b8;
+            border: 1px solid rgba(148,163,184,0.2);
+        }
+        .machine-status i { font-size: 0.55rem; }
+
+        .machine-name {
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+        .machine-brand {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            margin-bottom: 22px;
+        }
+
+        .machine-specs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.88rem;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .light-mode .spec-row { border-bottom-color: rgba(0,0,0,0.06); }
+        .spec-row:last-child { border-bottom: none; }
+        .spec-key { color: var(--text-sub); }
+        .spec-val { font-weight: 700; }
+
+        .machine-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .machine-tag {
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(59,130,246,0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(59,130,246,0.15);
+        }
+
+        /* ===== RÉALISATIONS ===== */
+        .realisations-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .real-card {
+            background: var(--bg-card);
+            border-radius: 18px;
+            padding: 28px 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            opacity: 0;
+            transform: translateY(24px);
+        }
+        .real-card.revealed { opacity: 1; transform: translateY(0); transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+        .real-card:nth-child(2) { transition-delay: 0.08s; }
+        .real-card:nth-child(3) { transition-delay: 0.16s; }
+        .real-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px var(--fdm-green-glow); border-color: rgba(34,197,94,0.25); }
+
+        .real-icon {
+            width: 50px; height: 50px;
+            background: rgba(34,197,94,0.1);
+            border-radius: 14px;
+            border: 1px solid rgba(34,197,94,0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem;
+            color: var(--fdm-green);
+            transition: background 0.3s ease;
+        }
+        .real-card:hover .real-icon { background: rgba(34,197,94,0.18); }
+
+        .real-title { font-size: 1rem; font-weight: 800; }
+        .real-desc { color: var(--text-sub); font-size: 0.88rem; line-height: 1.6; flex: 1; }
+        .real-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .real-tag {
+            padding: 3px 10px;
+            border-radius: 99px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            background: rgba(34,197,94,0.08);
+            color: var(--fdm-green);
+            border: 1px solid rgba(34,197,94,0.15);
+        }
+
+        /* ===== WORKFLOW ===== */
+        .workflow-section {
+            padding: 80px 5%;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            position: relative;
+        }
+
+        .workflow-steps::before {
+            content: '';
+            position: absolute;
+            top: 28px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--fdm-green), var(--primary));
+            z-index: 0;
+        }
+
+        .workflow-step {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .workflow-step.revealed { opacity: 1; transform: translateY(0); transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+        .workflow-step:nth-child(2) { transition-delay: 0.1s; }
+        .workflow-step:nth-child(3) { transition-delay: 0.2s; }
+        .workflow-step:nth-child(4) { transition-delay: 0.3s; }
+        .workflow-step:hover { transform: translateY(-5px); box-shadow: 0 14px 35px var(--primary-glow); border-color: rgba(59,130,246,0.25); }
+
+        .step-num {
+            width: 42px; height: 42px;
+            background: var(--bg-body);
+            border: 2px solid var(--fdm-green);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: var(--fdm-green);
+            margin: 0 auto 16px;
+        }
+        .step-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 8px; }
+        .step-desc { color: var(--text-sub); font-size: 0.82rem; line-height: 1.55; }
+
+        /* ===== MATÉRIAUX ===== */
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .mat-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .mat-card.revealed { opacity: 1; transform: translateY(0); transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+        .mat-card:hover { transform: translateY(-5px); box-shadow: 0 14px 35px var(--primary-glow); border-color: rgba(59,130,246,0.25); }
+
+        .mat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+        .mat-swatch { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; }
+        .mat-name { font-weight: 800; font-size: 1rem; }
+        .mat-type { color: var(--text-sub); font-size: 0.8rem; }
+        .mat-desc { color: var(--text-sub); font-size: 0.85rem; line-height: 1.55; margin-bottom: 12px; }
+        .mat-props { display: flex; flex-direction: column; gap: 6px; }
+        .mat-prop { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-sub); }
+        .mat-prop i { color: var(--fdm-green); width: 14px; flex-shrink: 0; }
+
+        /* ===== CTA ===== */
+        .fdm-cta {
+            text-align: center;
+            padding: 70px 30px;
+            background: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid rgba(34,197,94,0.15);
+            box-shadow: var(--card-shadow);
+            margin: 0 5% 100px;
+            max-width: 1300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .fdm-cta h2 { font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 12px; }
+        .fdm-cta p { color: var(--text-sub); font-size: 1rem; margin-bottom: 30px; }
+#printer-canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block; /* Évite les espaces vides sous le canvas */
+}
+        /* ===== KEYFRAMES ===== */
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        @keyframes pulse-line {
+            0%, 100% { opacity: 0.4; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.1); }
+        }
+        @keyframes scrollFadeUp {
+    from { 
+        opacity: 0; 
+        transform: translate(-50%, 20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translate(-50%, 0); /* On garde le -50% ici aussi ! */
+    }
+}
+
+        /* ===== LOADER MODÈLE ===== */
+        .model-loader {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            pointer-events: none;
+        }
+        .loader-ring {
+            width: 48px; height: 48px;
+            border: 3px solid rgba(34,197,94,0.15);
+            border-top-color: var(--fdm-green);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+        .loader-text { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; color: var(--text-sub); text-transform: uppercase; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .canvas-wrap {
+            flex: 1;
+            max-width: 560px;
+            width: 100%;
+            aspect-ratio: 1;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 1.2s ease 0.8s forwards;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .fdm-hero { flex-direction: column; min-height: auto; padding-top: 100px; }
+            .canvas-wrap { max-width: 100%; aspect-ratio: 4/3; }
+            .machines-grid { grid-template-columns: 1fr; }
+            .realisations-grid { grid-template-columns: 1fr; }
+            .workflow-steps { grid-template-columns: 1fr 1fr; }
+            .workflow-steps::before { display: none; }
+            .materials-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 550px) {
+            .workflow-steps { grid-template-columns: 1fr; }
+            .materials-grid { grid-template-columns: 1fr; }
+            .fdm-title { letter-spacing: -1px; }
+         
+        }
+    </style>
+</head>
+<body>
+
+<!-- Fond particules -->
+<canvas id="bg-canvas"></canvas>
+
+<nav>
+    <div class="nav-container">
+        <a href="../../../index.html" class="logo">
+            <img src="../../../common/Logo_IUT.png" alt="Logo IUT" class="nav-logo-img">
+            <span>PORTFOLIO GMP</span>
+        </a>
+        <ul>
+            <li><a href="../../../index.html">Accueil</a></li>
+            <li><a href="../../../competences.html">Compétences</a></li>
+            <li><a href="../../../projets.html">Projets</a></li>
+            <li><a href="../../../common/cv.pdf" target="_blank" class="btn-cv">Mon CV</a></li>
+            <li><button id="theme-toggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section style="position:relative;">
+    <div class="fdm-hero">
+
+        <div class="hero-text">
+            <p class="fdm-eyebrow"><i class="fa-solid fa-print" style="margin-right:8px;"></i>Projet Personnel</p>
+            <h1 class="fdm-title">Impression<br><em>3D FDM</em></h1>
+            <p class="fdm-sub">De la Sidewinder X1 à la Bambu Lab A1 : deux machines, des centaines d'heures d'impression et une passion pour fabriquer des pièces sur-mesure.</p>
+            <div class="fdm-badges">
+                <span class="fdm-badge fdm-badge--green"><i class="fa-solid fa-circle" style="font-size:0.5rem;"></i>Actif</span>
+                <span class="fdm-badge fdm-badge--blue"><i class="fa-solid fa-layer-group"></i>FDM</span>
+                <span class="fdm-badge fdm-badge--amber"><i class="fa-solid fa-fire"></i>PLA / PETG</span>
+            </div>
+        </div>
+
+        <div class="canvas-wrap">
+            <div class="model-loader" id="model-loader">
+                <div class="loader-ring"></div>
+                <span class="loader-text">Chargement du modèle…</span>
+            </div>
+            <canvas id="printer-canvas"></canvas>
+        </div>
+
+    </div>
+
+    <div class="scroll-hint">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<!-- ===== MACHINES ===== -->
+<section class="machines-section">
+    <p class="section-label">Évolution</p>
+    <h2 class="section-title">Mes machines</h2>
+
+    <div class="machines-grid">
+
+        <!-- Bambu Lab A1 — Actuelle -->
+        <div class="machine-card machine-card--current">
+            <span class="machine-status machine-status--active">
+                <i class="fa-solid fa-circle"></i> Machine actuelle
+            </span>
+            <div class="machine-name">Bambu Lab A1</div>
+            <div class="machine-brand">Bambu Lab · 2024 → Aujourd'hui</div>
+
+            <div class="machine-specs">
+                <div class="spec-row">
+                    <span class="spec-key">Volume d'impression</span>
+                    <span class="spec-val">256 × 256 × 256 mm</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-key">Vitesse max</span>
+                    <span class="spec-val">500 mm/s</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-key">Logiciel slicer</span>
+                    <span class="spec-val">Bambu Studio</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-key">Bed</span>
+                    <span class="spec-val">Textured PEI · Auto-nivellement</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-key">Connectivité</span>
+                    <span class="spec-val">Wi-Fi · Bambu Cloud</span>
+                </div>
+            </div>
+
+            <div class="machine-tags">
+                <span class="machine-tag">Bambu Studio</span>
+                <span class="machine-tag">AMS compatible</span>
+                <span class="machine-tag">Auto-calibration</span>
+                <span class="machine-tag">Vibration comp.</span>
+            </div>
+        </div>
+
+        <!-- Sidewinder X1 — Ancienne -->
+        <div class="machine-card">
+            <span class="machine-status machine-status--inactive">
+                <i class="fa-solid fa-circle"></i> Ancienne machine
+            </span>
+            <div class="machine-name">Artillery Sidewinder X1</div>
+            <div class="machine-brand">Artillery · 2022 → 2024</div>
+
+            <div class="machine-specs">
+                <div class="spec-row">
+                    <span class="spec-key">Volume d'impression</span>
+                    <span class="spec-val">300 × 300 × 400 mm</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-key">Vitesse max</span>
+                    <span class="spec-val">150 mm/s</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-key">Logiciel slicer</span>
+                    <span class="spec-val">Cura</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-key">Bed</span>
+                    <span class="spec-val">Verre chauffant · Manuel</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-key">Connectivité</span>
+                    <span class="spec-val">Aucune</span>
+                </div>
+            </div>
+
+            <div class="machine-tags">
+                <span class="machine-tag">Cura</span>
+                <span class="machine-tag">Direct Drive</span>
+                <span class="machine-tag">Calibration manuelle</span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ===== RÉALISATIONS ===== -->
+<section class="scroll-section">
+    <p class="section-label">Ce que j'ai fabriqué</p>
+    <h2 class="section-title">Réalisations</h2>
+
+    <div class="realisations-grid">
+        <div class="real-card">
+            <div class="real-icon"><i class="fa-solid fa-rocket"></i></div>
+            <div class="real-title">Moteur de fusée NOVA</div>
+            <p class="real-desc">Impression du moteur de NOVA III en PETG.</p>
+            <div class="real-tags">
+                <span class="real-tag">PETG</span>
+                <span class="real-tag">NOVA III</span>
+            </div>
+        </div>
+
+        <div class="real-card">
+            <div class="real-icon"><i class="fa-solid fa-gear"></i></div>
+            <div class="real-title">Pièces mécaniques sur-mesure</div>
+            <p class="real-desc">Conception sous Fusion360: Impression de supports, adaptateurs et prototypes de pièces mécaniques pour différents projets.</p>
+            <div class="real-tags">
+                <span class="real-tag">PLA</span>
+                <span class="real-tag">Fusion360</span>
+                <span class="real-tag">Prototypage</span>
+            </div>
+        </div>
+
+        <div class="real-card">
+            <div class="real-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+            <div class="real-title">Maintenance & calibration</div>
+            <p class="real-desc">Entretien complet des deux machines : remplacement de buse, calibration du bed, ajustement des paramètres de rétraction et de température.</p>
+            <div class="real-tags">
+                <span class="real-tag">Maintenance</span>
+                <span class="real-tag">Calibration</span>
+                <span class="real-tag">Réglages</span>
+            </div>
+        </div>
+
+        <div class="real-card">
+            <div class="real-icon"><i class="fa-solid fa-cube"></i></div>
+            <div class="real-title">Accessoires & Décoration</div>
+            <p class="real-desc">Fabrication d'accessoires : rangements, figurine, boîtiers électroniques et pièces de remplacement introuvables.</p>
+            <div class="real-tags">
+                <span class="real-tag">PLA/PETG</span>
+                <span class="real-tag">Déco</span>
+                <span class="real-tag">Utilitaire</span>
+            </div>
+        </div>
+
+        <div class="real-card">
+            <div class="real-icon"><i class="fa-solid fa-sliders"></i></div>
+            <div class="real-title">Optimisation de paramètres</div>
+            <p class="real-desc">Tests de profils d'impression, température, vitesse et remplissage pour maximiser la résistance mécanique selon le matériau utilisé.</p>
+            <div class="real-tags">
+                <span class="real-tag">Profils</span>
+                <span class="real-tag">Tests</span>
+                <span class="real-tag">Bambu Studio</span>
+            </div>
+        </div>
+
+        <div class="real-card">
+            <div class="real-icon"><i class="fa-solid fa-print"></i></div>
+            <div class="real-title">Gestion de la qualité</div>
+            <p class="real-desc">Contrôle dimensionnel des pièces imprimées au pied à coulisse, comparaison avec le modèle CAO.</p>
+            <div class="real-tags">
+                <span class="real-tag">Métrologie</span>
+                <span class="real-tag">Contrôle</span>
+                <span class="real-tag">Tolérances</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== WORKFLOW ===== -->
+<section class="workflow-section">
+    <p class="section-label">Du fichier à la pièce</p>
+    <h2 class="section-title">Comment ?</h2>
+
+    <div class="workflow-steps">
+        <div class="workflow-step">
+            <div class="step-num">1</div>
+            <div class="step-title">Conception CAO</div>
+            <p class="step-desc">Modélisation de la pièce en respectant les contraintes d'impression (dimension, supports).</p>
+        </div>
+        <div class="workflow-step">
+            <div class="step-num">2</div>
+            <div class="step-title">Slicing</div>
+            <p class="step-desc">Paramétrage dans Bambu Studio : orientation, remplissage, supports, température et vitesse selon le matériau.</p>
+        </div>
+        <div class="workflow-step">
+            <div class="step-num">3</div>
+            <div class="step-title">Impression</div>
+            <p class="step-desc">Lancement sur la Bambu Lab A1, surveillance des premières couches et suivi temps réel via l'app.</p>
+        </div>
+        <div class="workflow-step">
+            <div class="step-num">4</div>
+            <div class="step-title">Contrôle / Finitions</div>
+            <p class="step-desc">Vérification dimensionnelle au pied à coulisse et finitions (ponçage, perçage).</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===== MATÉRIAUX ===== -->
+<section class="scroll-section">
+    <p class="section-label">Filaments utilisés</p>
+    <h2 class="section-title">Matériaux</h2>
+
+    <div class="materials-grid">
+        <div class="mat-card">
+            <div class="mat-header">
+                <div class="mat-swatch" style="background: linear-gradient(135deg, #60a5fa, #3b82f6);"></div>
+                <div>
+                    <div class="mat-name">PLA</div>
+                    <div class="mat-type">Polylactic Acid · Matériau principal</div>
+                </div>
+            </div>
+            <p class="mat-desc">Matériau de base pour prototypage, pièces décoratives. Facile à imprimer.</p>
+            <div class="mat-props">
+                <div class="mat-prop"><i class="fa-solid fa-thermometer-half"></i> Température : 190–220°C</div>
+                <div class="mat-prop"><i class="fa-solid fa-check"></i> Facile à imprimer</div>
+                <div class="mat-prop"><i class="fa-solid fa-leaf"></i> Biodégradable</div>
+            </div>
+        </div>
+
+        <div class="mat-card">
+            <div class="mat-header">
+                <div class="mat-swatch" style="background: linear-gradient(135deg, #34d399, #10b981);"></div>
+                <div>
+                    <div class="mat-name">PETG</div>
+                    <div class="mat-type">Polyethylene Terephthalate Glycol</div>
+                </div>
+            </div>
+            <p class="mat-desc">Pour pièces fonctionnelles nécessitant résistance mécanique et thermique. Utilisé sur le moteur de NOVA III et la plupart des pieces mecaniques.</p>
+            <div class="mat-props">
+                <div class="mat-prop"><i class="fa-solid fa-thermometer-half"></i> Température : 230–250°C</div>
+                <div class="mat-prop"><i class="fa-solid fa-shield"></i> Résistant aux chocs</div>
+                <div class="mat-prop"><i class="fa-solid fa-droplet"></i> Résistant à l'humidité</div>
+            </div>
+        </div>
+
+        <div class="mat-card">
+            <div class="mat-header">
+                <div class="mat-swatch" style="background: linear-gradient(135deg, #000000, #2e2e2e);"></div>
+                <div>
+                    <div class="mat-name">TPU 90a</div>
+                    <div class="mat-type">Flexible · Deformable</div>
+                </div>
+            </div>
+            <p class="mat-desc">Matériaux flexible offrant des perspective de piece interesante.</p>
+            <div class="mat-props">
+                <div class="mat-prop"><i class="fa-solid fa-thermometer-half"></i> Température : 220–250°C</div>
+                <div class="mat-prop"><i class="fa-solid fa-sliders"></i> Flexible</div>
+                <div class="mat-prop"><i class="fa-solid fa-shield"></i> Résistant</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<div class="fdm-cta">
+    <h2>Un projet nécessitant de l'impression 3D ?</h2>
+    <p>Conception, prototypage ou pièce sur-mesure — je peux répondre à vos besoins.</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <a href="../../../contact.html" class="btn-primary">Me contacter <i class="fa-solid fa-paper-plane"></i></a>
+        <a href="../../../projets.html" class="btn-secondary"><i class="fa-solid fa-arrow-left"></i> Retour aux projets</a>
+    </div>
+</div>
+
+<a href="#" id="back-top" class="back-btn-floating" aria-label="Retour en haut">
+    <i class="fa-solid fa-chevron-up"></i>
+</a>
+
+<!-- Three.js -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script>
+/* =====================================================
+   THÈME
+===================================================== */
+const themeBtn = document.getElementById("theme-toggle");
+const themeIcon = themeBtn.querySelector("i");
+function updateThemeIcon() {
+    themeIcon.className = document.documentElement.classList.contains("light-mode")
+        ? "fa-solid fa-sun" : "fa-solid fa-moon";
+}
+updateThemeIcon();
+themeBtn.addEventListener("click", () => {
+    const isLight = document.documentElement.classList.toggle("light-mode");
+    localStorage.setItem("theme", isLight ? "light" : "dark");
+    updateThemeIcon();
+
+});
+
+/* =====================================================
+   FOND PARTICULES (canvas bg)
+===================================================== */
+(function() {
+    const canvas = document.getElementById("bg-canvas");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    function init(n) {
+        particles = [];
+        for (let i = 0; i < n; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 1.2 + 0.3,
+                alpha: Math.random() * 0.5 + 0.1,
+                speed: Math.random() * 0.004 + 0.001,
+                phase: Math.random() * Math.PI * 2
+            });
+        }
+    }
+    let frame = 0;
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        frame++;
+        particles.forEach(p => {
+            const a = p.alpha * (0.5 + 0.5 * Math.sin(frame * p.speed + p.phase));
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(34,197,94,${a})`;
+            ctx.fill();
+        });
+        requestAnimationFrame(draw);
+    }
+    resize(); init(120); draw();
+    window.addEventListener("resize", () => { resize(); init(120); });
+})();
+
+/* =====================================================
+   CONFIGURATION INITIALE
+===================================================== */
+const canvas3D = document.getElementById("printer-canvas");
+const loaderUI = document.getElementById("model-loader");
+const wrap = canvas3D.closest(".canvas-wrap");
+
+const renderer = new THREE.WebGLRenderer({ canvas: canvas3D, alpha: true, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+camera.position.set(0, 2, 11); // Reculée pour être sûr de voir
+camera.lookAt(0, 0, 0);
+
+// Aide visuelle : Affiche des lignes ROUGE (X), VERTE (Y), BLEUE (Z) au centre
+// Si tu vois ces lignes mais pas l'imprimante, le fichier GLB n'est pas chargé.
+scene.add(new THREE.AxesHelper(5));
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.5)); // Baisse l'ambiance pour retrouver du contraste
+
+const mainLight = new THREE.DirectionalLight(0xffffff, 0.7); // Lumière principale plus douce
+mainLight.position.set(5, 10, 7);
+scene.add(mainLight);
+
+// Ajoute une petite lumière de débouchage bleutée pour le look "tech"
+const fillLight = new THREE.PointLight(0x3b82f6, 0.5);
+fillLight.position.set(-5, 2, 5);
+scene.add(fillLight);
+
+
+/* =====================================================
+   CHARGEMENT DU MODÈLE GLB (CORRIGÉ)
+===================================================== */
+const printerGroup = new THREE.Group();
+scene.add(printerGroup);
+
+const gltfLoader = new THREE.GLTFLoader();
+
+// IMPORTANT : Vérifie bien que "bambu-a1.glb" est dans le même dossier que ton HTML
+// Si ton HTML est dans /projects/ et ton modèle à la racine, mets : "../../bambu-a1.glb"
+const modelPath = 'bambu-a1.glb'; 
+
+gltfLoader.load(modelPath, (gltf) => {
+    const model = gltf.scene;
+
+    // 1. Appliquer une rotation sur l'axe X pour le redresser
+    // Le modèle est "à l'envers", on applique -Math.PI / 2 sur X pour le redresser (Z vers Y).
+    // Tu peux aussi essayer -Math.PI si cela ne suffit pas
+    model.rotation.x = Math.PI / 2 ;
+
+    // 2. Créer une Bounding Box du modèle APRES la rotation pour le centrage
+    const box = new THREE.Box3().setFromObject(model);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+
+    // 3. Appliquer le décalage (offset) de centrage sur le modèle
+    // On déplace le modèle à l'intérieur du groupe pour que son milieu géométrique soit à (0,0,0) relatif au groupe
+    model.position.x -= 0;
+    model.position.y -= -0;
+    model.position.z -= 0;
+
+    // 4. Ajouter le modèle au groupe
+    // Maintenant, le (0,0,0) du groupe est au milieu géométrique de l'imprimante
+    printerGroup.add(model);
+    
+    // 5. Ajuster l'échelle et la position globale du groupe
+    printerGroup.scale.set(0.01, 0.01, 0.01); 
+    printerGroup.position.y = -1.2; 
+
+    if(loaderUI) loaderUI.style.display = "none";
+}, undefined, (error) => {
+    console.error(error);
+});
+/* =====================================================
+   BOUCLE DE RENDU & RESIZE
+===================================================== */
+function resize() {
+    const w = wrap.clientWidth;
+    const h = wrap.clientHeight;
+    
+    // Le 'false' est CRUCIAL : il dit à Three.js de ne pas toucher au CSS 
+    // du canvas, mais seulement à sa résolution interne.
+    renderer.setSize(w, h, false); 
+    
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    printerGroup.rotation.y += 0.002; // Rotation lente pour tester
+    renderer.render(scene, camera);
+}
+
+window.addEventListener("resize", resize);
+resize();
+animate();
+/* =====================================================
+   SCROLL ANIMATION + ROTATION AUTO
+===================================================== */
+let scrollProgress = 0;
+let autoRotY = 0;
+let isDragging = false, prevMouseX = 0, prevMouseY = 0;
+let manualRotX = 0, manualRotY = 0;
+
+window.addEventListener("scroll", () => {
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    scrollProgress = Math.min(window.scrollY / maxScroll, 1);
+});
+
+canvas3D.addEventListener("mousedown", e => { isDragging = true; prevMouseX = e.clientX; prevMouseY = e.clientY; });
+window.addEventListener("mouseup", () => { isDragging = false; });
+window.addEventListener("mousemove", e => {
+    if (!isDragging) return;
+    manualRotY += (e.clientX - prevMouseX) * 0.008;
+    manualRotX += (e.clientY - prevMouseY) * 0.005;
+    manualRotX = Math.max(-0.6, Math.min(0.6, manualRotX));
+    prevMouseX = e.clientX;
+    prevMouseY = e.clientY;
+});
+
+// Touch
+canvas3D.addEventListener("touchstart", e => { isDragging = true; prevMouseX = e.touches[0].clientX; prevMouseY = e.touches[0].clientY; }, { passive: true });
+window.addEventListener("touchend", () => { isDragging = false; });
+window.addEventListener("touchmove", e => {
+    if (!isDragging) return;
+    manualRotY += (e.touches[0].clientX - prevMouseX) * 0.008;
+    manualRotX += (e.touches[0].clientY - prevMouseY) * 0.005;
+    manualRotX = Math.max(-0.6, Math.min(0.6, manualRotX));
+    prevMouseX = e.touches[0].clientX;
+    prevMouseY = e.touches[0].clientY;
+}, { passive: true });
+
+/* =====================================================
+   SCROLL REVEAL
+===================================================== */
+const revObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("revealed"); });
+}, { threshold: 0.12 });
+
+document.querySelectorAll(".machine-card, .real-card, .workflow-step, .mat-card").forEach(el => revObs.observe(el));
+
+/* =====================================================
+   RETOUR EN HAUT
+===================================================== */
+const backBtn = document.getElementById("back-top");
+window.addEventListener("scroll", () => { backBtn.classList.toggle("visible", window.scrollY > 400); });
+backBtn.addEventListener("click", e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); });
+</script>
+
+</body>
+</html>

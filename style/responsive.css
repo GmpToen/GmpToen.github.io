@@ -23,9 +23,11 @@
     }
 
     nav ul {
-        gap: 12px;
+        gap: 8px;
         margin: 0;
         padding: 0;
+        flex-wrap: nowrap;
+        align-items: center;
     }
 
     nav ul li a {
@@ -34,8 +36,10 @@
     }
 
     .btn-cv {
-        padding: 6px 12px;
-        font-size: 0.8rem;
+        padding: 6px 10px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        flex-shrink: 0;
     }
 
     /* Grille → 1 colonne */
