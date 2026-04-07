@@ -3,1257 +3,709 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAE 2.4 — Pilotage d'une production stabilisée | Enzo Sanchez Sartori</title>
+    <title>SAÉ 2.4 — Indicateurs & Fiche de suivi | Portfolio Enzo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script>
         if (localStorage.getItem("theme") === "light") {
             document.documentElement.classList.add("light-mode");
         }
     </script>
-    <!-- Liens relatifs depuis common/projects/S2/SAE24/ vers la racine -->
-    <link rel="stylesheet" href="../../../../style/main.css">
-    <link rel="stylesheet" href="../../../../style/page.css">
-    <link rel="stylesheet" href="../../../../style/perso1.CSS">
-    <link rel="stylesheet" href="../../../../style/responsive.css">
-    <link rel="stylesheet" href="../../../../style/ui.css">
-    <link rel="icon" type="image/png" href="../../../../common/mon-icone.png">
-
-    <style>
-        /* ===== PAGE BACKGROUND ===== */
-        .hero-grid-bg {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            background-image:
-                linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
-            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
-            pointer-events: none;
-        }
-        .page-glow-bg {
-            position: fixed;
-            inset: 0;
-            z-index: -2;
-            pointer-events: none;
-            background:
-                radial-gradient(ellipse 60% 50% at 70% 40%, rgba(59,130,246,0.12) 0%, transparent 70%),
-                radial-gradient(ellipse 40% 60% at 20% 80%, rgba(99,102,241,0.08) 0%, transparent 60%);
-        }
-        .light-mode .page-glow-bg {
-            background:
-                radial-gradient(ellipse 60% 50% at 70% 40%, rgba(59,130,246,0.08) 0%, transparent 70%),
-                radial-gradient(ellipse 40% 60% at 20% 80%, rgba(99,102,241,0.05) 0%, transparent 60%);
-        }
-
-        /* ===== HERO SAE ===== */
-        .sae-hero {
-            padding: 120px 20px 60px;
-            max-width: 1200px;
-            margin: 0 auto;
-            animation: fadeUp 0.6s ease both;
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .sae-meta {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .sae-badge {
-            background: rgba(59,130,246,0.15);
-            color: #60a5fa;
-            padding: 6px 16px;
-            border-radius: 99px;
-            font-weight: 700;
-            font-size: 0.82rem;
-            border: 1px solid rgba(59,130,246,0.3);
-        }
-
-        .sae-badge-s2 {
-            background: rgba(99,102,241,0.12);
-            color: #818cf8;
-            border-color: rgba(99,102,241,0.25);
-        }
-
-        .sae-hero h1 {
-            font-size: clamp(1.8rem, 5vw, 3rem);
-            font-weight: 900;
-            letter-spacing: -1px;
-            line-height: 1.1;
-            margin-bottom: 16px;
-        }
-
-        .sae-hero .subtitle {
-            font-size: 1.05rem;
-            color: var(--text-sub);
-            max-width: 700px;
-            margin-bottom: 30px;
-        }
-
-        /* ===== MAIN LAYOUT ===== */
-        .sae-main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px 100px;
-        }
-
-        /* ===== GRID LAYOUT ===== */
-        .sae-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 40px;
-        }
-
-        .sae-grid--wide {
-            grid-template-columns: 2fr 1fr;
-        }
-
-        /* ===== CARDS ===== */
-        .sae-card {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 28px;
-            border: 1px solid rgba(255,255,255,0.05);
-            box-shadow: var(--card-shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .light-mode .sae-card {
-            border-color: rgba(0,0,0,0.06);
-        }
-
-        .sae-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px var(--primary-glow);
-        }
-
-        .sae-card--accent {
-            border-left: 3px solid var(--primary);
-        }
-
-        .sae-card--full {
-            grid-column: 1 / -1;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .light-mode .card-header {
-            border-bottom-color: rgba(0,0,0,0.07);
-        }
-
-        .card-icon {
-            width: 44px;
-            height: 44px;
-            min-width: 44px;
-            background: rgba(59,130,246,0.12);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: var(--primary);
-            border: 1px solid rgba(59,130,246,0.2);
-        }
-
-        .card-header h2 {
-            font-size: 1.1rem;
-            font-weight: 800;
-        }
-
-        .card-header p {
-            font-size: 0.82rem;
-            color: var(--text-sub);
-        }
-
-        /* ===== CONTEXTE ===== */
-        .context-text {
-            color: var(--text-sub);
-            font-size: 0.93rem;
-            line-height: 1.75;
-        }
-
-        .context-text strong {
-            color: var(--text-main);
-        }
-
-        /* ===== JOURNAL DE BORD ===== */
-        .journal-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .journal-entry {
-            padding: 18px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            cursor: pointer;
-            transition: background 0.2s ease;
-            border-radius: 8px;
-            padding-left: 10px;
-        }
-
-        .light-mode .journal-entry {
-            border-bottom-color: rgba(0,0,0,0.06);
-        }
-
-        .journal-entry:last-child {
-            border-bottom: none;
-        }
-
-        .journal-entry:hover {
-            background: rgba(59,130,246,0.05);
-        }
-
-        .journal-entry-header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 6px;
-        }
-
-        .journal-entry-title {
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--text-main);
-        }
-
-        .journal-date {
-            font-size: 0.75rem;
-            color: var(--text-sub);
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .journal-tasks {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin-top: 8px;
-        }
-
-        .journal-task {
-            font-size: 0.82rem;
-            color: var(--text-sub);
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-        }
-
-        .journal-task::before {
-            content: "—";
-            color: var(--primary);
-            opacity: 0.6;
-            flex-shrink: 0;
-        }
-
-        .entry-toggle {
-            display: none;
-        }
-
-        .journal-tasks-wrapper {
-            overflow: hidden;
-            max-height: 0;
-            transition: max-height 0.35s ease;
-        }
-
-        .journal-entry.open .journal-tasks-wrapper {
-            max-height: 200px;
-        }
-
-        .journal-chevron {
-            font-size: 0.75rem;
-            color: var(--text-sub);
-            transition: transform 0.3s ease;
-            flex-shrink: 0;
-            margin-top: 3px;
-        }
-
-        .journal-entry.open .journal-chevron {
-            transform: rotate(180deg);
-        }
-
-        .journal-count {
-            font-size: 0.72rem;
-            color: var(--primary);
-            background: rgba(59,130,246,0.1);
-            border-radius: 99px;
-            padding: 2px 8px;
-            font-weight: 700;
-        }
-
-        /* ===== INDICATEURS ===== */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        .kpi-item {
-            background: rgba(59,130,246,0.06);
-            border: 1px solid rgba(59,130,246,0.12);
-            border-radius: 14px;
-            padding: 16px;
-            text-align: center;
-        }
-
-        .kpi-value {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: var(--primary);
-            letter-spacing: -0.5px;
-            line-height: 1;
-            margin-bottom: 6px;
-        }
-
-        .kpi-label {
-            font-size: 0.75rem;
-            color: var(--text-sub);
-            font-weight: 600;
-            line-height: 1.3;
-        }
-
-        .kpi-formula {
-            font-size: 0.72rem;
-            color: var(--text-sub);
-            margin-top: 4px;
-            opacity: 0.7;
-            font-style: italic;
-        }
-
-        /* ===== FICHE DE SUIVI ===== */
-        .fiche-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.82rem;
-        }
-
-        .fiche-table th {
-            background: rgba(59,130,246,0.1);
-            color: var(--primary);
-            font-weight: 700;
-            padding: 10px 12px;
-            text-align: left;
-            border-bottom: 2px solid rgba(59,130,246,0.2);
-            font-size: 0.78rem;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-        }
-
-        .fiche-table td {
-            padding: 9px 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            color: var(--text-sub);
-            vertical-align: middle;
-        }
-
-        .light-mode .fiche-table td {
-            border-bottom-color: rgba(0,0,0,0.05);
-        }
-
-        .fiche-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .fiche-table tr:hover td {
-            background: rgba(59,130,246,0.04);
-        }
-
-        .status-ok {
-            background: rgba(34,197,94,0.12);
-            color: #22c55e;
-            border: 1px solid rgba(34,197,94,0.2);
-            padding: 2px 10px;
-            border-radius: 99px;
-            font-weight: 700;
-            font-size: 0.73rem;
-            white-space: nowrap;
-        }
-
-        .status-warn {
-            background: rgba(250,204,21,0.12);
-            color: #eab308;
-            border: 1px solid rgba(250,204,21,0.2);
-            padding: 2px 10px;
-            border-radius: 99px;
-            font-weight: 700;
-            font-size: 0.73rem;
-        }
-
-        .status-alert {
-            background: rgba(239,68,68,0.12);
-            color: #ef4444;
-            border: 1px solid rgba(239,68,68,0.2);
-            padding: 2px 10px;
-            border-radius: 99px;
-            font-weight: 700;
-            font-size: 0.73rem;
-        }
-
-        /* ===== CALCULS SECTION ===== */
-        .calc-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .calc-block {
-            background: rgba(0,0,0,0.15);
-            border-radius: 12px;
-            padding: 16px;
-            border: 1px solid rgba(255,255,255,0.04);
-        }
-
-        .light-mode .calc-block {
-            background: rgba(0,0,0,0.03);
-            border-color: rgba(0,0,0,0.06);
-        }
-
-        .calc-block h4 {
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .calc-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 5px 0;
-            font-size: 0.83rem;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-        }
-
-        .light-mode .calc-row {
-            border-bottom-color: rgba(0,0,0,0.05);
-        }
-
-        .calc-row:last-child {
-            border-bottom: none;
-        }
-
-        .calc-label {
-            color: var(--text-sub);
-        }
-
-        .calc-value {
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .calc-arrow {
-            color: var(--primary);
-            margin: 0 6px;
-            font-size: 0.75rem;
-        }
-
-        /* ===== LIVRABLES ===== */
-        .livrable-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .livrable-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 18px;
-            background: rgba(59,130,246,0.05);
-            border: 1px solid rgba(59,130,246,0.1);
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .livrable-item:hover {
-            background: rgba(59,130,246,0.1);
-            border-color: rgba(59,130,246,0.25);
-            transform: translateX(4px);
-        }
-
-        .livrable-icon {
-            width: 38px;
-            height: 38px;
-            min-width: 38px;
-            background: rgba(59,130,246,0.15);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            color: var(--primary);
-        }
-
-        .livrable-name {
-            font-weight: 700;
-            font-size: 0.9rem;
-        }
-
-        .livrable-desc {
-            font-size: 0.78rem;
-            color: var(--text-sub);
-            margin-top: 2px;
-        }
-
-        .livrable-arrow {
-            margin-left: auto;
-            color: var(--text-sub);
-            font-size: 0.8rem;
-            transition: transform 0.3s ease;
-        }
-
-        .livrable-item:hover .livrable-arrow {
-            transform: translateX(4px);
-            color: var(--primary);
-        }
-
-        /* ===== COMPETENCES MOBILISÉES ===== */
-        .comp-pill-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 4px;
-        }
-
-        .comp-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(59,130,246,0.1);
-            color: #60a5fa;
-            padding: 5px 13px;
-            border-radius: 99px;
-            font-size: 0.79rem;
-            font-weight: 600;
-            border: 1px solid rgba(59,130,246,0.15);
-            transition: background 0.2s ease;
-        }
-
-        .comp-pill:hover {
-            background: rgba(59,130,246,0.18);
-        }
-
-        /* ===== TRS INDICATOR ===== */
-        .trs-display {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 28px 20px;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .trs-value {
-            font-size: 3.5rem;
-            font-weight: 900;
-            letter-spacing: -2px;
-            color: var(--primary);
-            line-height: 1;
-        }
-
-        .trs-formula {
-            font-size: 0.85rem;
-            color: var(--text-sub);
-            font-weight: 600;
-        }
-
-        .trs-sub {
-            font-size: 0.78rem;
-            color: var(--text-sub);
-            text-align: center;
-        }
-
-        .trs-bar-wrap {
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .trs-bar-bg {
-            height: 8px;
-            background: rgba(255,255,255,0.07);
-            border-radius: 99px;
-            overflow: hidden;
-        }
-
-        .light-mode .trs-bar-bg {
-            background: rgba(0,0,0,0.08);
-        }
-
-        .trs-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), #60a5fa);
-            border-radius: 99px;
-            width: 0;
-            transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* ===== ALERT BANNER ===== */
-        .alert-banner {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            padding: 16px 20px;
-            background: rgba(250,204,21,0.08);
-            border: 1px solid rgba(250,204,21,0.2);
-            border-radius: 14px;
-            margin-top: 16px;
-        }
-
-        .alert-banner i {
-            color: #eab308;
-            font-size: 1.1rem;
-            margin-top: 2px;
-            flex-shrink: 0;
-        }
-
-        .alert-banner p {
-            font-size: 0.85rem;
-            color: var(--text-sub);
-            line-height: 1.55;
-        }
-
-        .alert-banner strong {
-            color: #eab308;
-        }
-
-        /* ===== SECTION TITLES ===== */
-        .section-label {
-            font-size: 0.72rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-label::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: rgba(59,130,246,0.2);
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 900px) {
-            .sae-grid {
-                grid-template-columns: 1fr;
-            }
-            .sae-grid--wide {
-                grid-template-columns: 1fr;
-            }
-            .sae-card--full {
-                grid-column: 1;
-            }
-            .kpi-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .calc-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .sae-hero {
-                padding: 100px 16px 40px;
-            }
-            .sae-main {
-                padding: 0 16px 80px;
-            }
-            .kpi-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../../../../../style/main.css">
+    <link rel="stylesheet" href="../../../../../style/page.css">
+    <link rel="stylesheet" href="../../../../../style/perso1.CSS">
+    <link rel="stylesheet" href="../../../../../style/responsive.css">
+    <link rel="stylesheet" href="../../../../../style/ui.css">
+    <link rel="stylesheet" href="../../../../../style/competences.css">
 </head>
 <body>
-    <div class="hero-grid-bg"></div>
-    <div class="page-glow-bg"></div>
 
-    <!-- NAVIGATION -->
-    <nav>
-        <div class="nav-container">
-            <a href="../../../../index.html" class="logo">
-                <img src="../../../../common/Logo_IUT.png" alt="Logo IUT" class="nav-logo-img">
-                <span>PORTFOLIO GMP</span>
-            </a>
-            <ul>
-                <li><a href="../../../../index.html">Accueil</a></li>
-                <li><a href="../../../../competences.html">Compétences</a></li>
-                <li><a href="../../../../projets.html" class="active">Projets</a></li>
-                <li><a href="../../../../common/cv.pdf" target="_blank" class="btn-cv">Mon CV</a></li>
-                <li><button id="theme-toggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button></li>
-            </ul>
+<nav>
+    <div class="nav-container">
+        <a href="../../../../../index.html" class="logo">
+            <img src="../../../../../common/Logo_IUT.png" alt="Logo IUT" class="nav-logo-img">
+            <span>PORTFOLIO GMP</span>
+        </a>
+        <ul>
+            <li><a href="../../../../../index.html">Accueil</a></li>
+            <li><a href="../../../../../competences.html">Compétences</a></li>
+            <li><a href="../../../../../projets.html" class="active">Projets</a></li>
+            <li><a href="../../../../../common/cv.pdf" target="_blank" class="btn-cv">Mon CV</a></li>
+            <li><button id="theme-toggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" style="padding: 80px 20px 40px;">
+    <div class="hero-content">
+        <span class="badge">BUT GMP — SEMESTRE 2</span>
+        <h1>SAÉ 2.4</h1>
+        <p class="description">Indicateurs de production &amp; Fiche de suivi — Visual Management</p>
+    </div>
+</header>
+
+<main class="container" style="max-width: 1100px; margin: 0 auto; padding: 0 20px 100px;">
+
+    <!-- Breadcrumb -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:40px;flex-wrap:wrap;">
+        <a href="../../../../../projets.html" style="display:inline-flex;align-items:center;gap:6px;color:var(--text-sub);font-size:0.88rem;">
+            <i class="fa-solid fa-arrow-left"></i> Projets
+        </a>
+        <i class="fa-solid fa-chevron-right" style="color:var(--text-sub);font-size:0.7rem;"></i>
+        <a href="../../S2/s2.html" style="color:var(--text-sub);font-size:0.88rem;">Semestre 2</a>
+        <i class="fa-solid fa-chevron-right" style="color:var(--text-sub);font-size:0.7rem;"></i>
+        <span style="color:var(--primary);font-size:0.88rem;font-weight:700;">SAÉ 2.4</span>
+    </div>
+
+    <!-- Carte intro -->
+    <div class="sae-intro-card">
+        <div class="sae-intro-left">
+            <div class="sae-num-big">SAÉ 2.4</div>
+            <div class="ue-badge ue-orange">UE 2.4</div>
+            <span class="comp-level comp-level--intermediate">En cours</span>
         </div>
-    </nav>
-
-    <!-- HERO -->
-    <header class="sae-hero">
-        <div class="sae-meta">
-            <span class="sae-badge">SAE 2.4</span>
-            <span class="sae-badge sae-badge-s2">Semestre 2</span>
-            <span class="sae-badge" style="background:rgba(34,197,94,0.1);color:#22c55e;border-color:rgba(34,197,94,0.2);">
-                <i class="fa-solid fa-circle-check" style="font-size:0.7rem;"></i> Terminée
-            </span>
+        <div class="sae-intro-right">
+            <h2>Indicateurs de production &amp; Visual Management</h2>
+            <p>Lors de la SAÉ 2.4, nous avons reçu une phase d'un camarade réalisée en SAÉ 2.3. À partir de cette phase, nous devions calculer tous les indicateurs OPI vus en cours (Top, Tcyeff, Takt…), concevoir une <strong>fiche de suivi</strong> et ensuite <strong>realisé l'usinage de la phase que nous nous somme attribuer</strong> en 18 heures d'usinage.</p>
+            <div class="comp-tags" style="margin-top:16px;">
+                <span>Indicateurs OPI</span>
+                <span>Takt / Top / Tcyeff</span>
+                <span>Fiche de suivi</span>
+                <span>Usinage</span>
+            </div>
         </div>
-        <h1>Pilotage d'une production<br>stabilisée</h1>
-        <p class="subtitle">
-            Réception d'une phase d'usinage d'un camarade (SAE 2.3), calcul des indicateurs OPI 
-            (Top, Tcyeff, Takt, Charge, Capacité…), élaboration de la fiche de suivi et mise en place du Visual Management.
-        </p>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;">
-            <span class="comp-pill"><i class="fa-solid fa-chart-line"></i> Indicateurs OPI</span>
-            <span class="comp-pill"><i class="fa-solid fa-table"></i> Fiche de suivi</span>
-            <span class="comp-pill"><i class="fa-solid fa-eye"></i> Visual Management</span>
-            <span class="comp-pill"><i class="fa-solid fa-file-powerpoint"></i> PowerPoint calculs</span>
+    </div>
+
+    <!-- Bouton ce que j'ai appris -->
+    <div style="display:flex;justify-content:center;margin-bottom:40px;">
+        <a href="#bilan" id="btn-scroll-bilan" class="btn-scroll-bilan">
+            <i class="fa-solid fa-lightbulb"></i>
+            Ce que j'ai appris
+            <i class="fa-solid fa-arrow-down"></i>
+        </a>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         ÉTAPE 1 : Contexte & Calculs théoriques
+    ══════════════════════════════════════════ -->
+    <section class="sae-step">
+        <div class="step-header">
+            <div class="step-num">01</div>
+            <div>
+                <h3>Contexte &amp; Calculs théoriques</h3>
+                <p class="step-sub">Top, Tcyeff, Takt, Charge, Capacité et Taux de charge</p>
+            </div>
         </div>
-    </header>
+        <div class="step-content">
+            <p>Nous avons reçu une phase d'usinage réalisée par un camarade lors de la SAÉ 2.3. À partir de cette phase, j'ai calculé l'ensemble des <strong>indicateurs OPI</strong> : temps d'ouverture, Takt, Top, Tcyeff, capacité horaire, charge et taux de charge.</p>
 
-    <!-- MAIN CONTENT -->
-    <main class="sae-main">
+            <!-- Grille indicateurs -->
+            <div class="kpi-grid" style="margin-top:24px;">
+                <div class="kpi-card">
+                    <div class="kpi-icon"><i class="fa-solid fa-clock"></i></div>
+                    <div class="kpi-value">1 080 min</div>
+                    <div class="kpi-label">Temps d'ouverture (18h)
 
-        <!-- ROW 1 : Contexte + Journal -->
-        <div class="section-label"><i class="fa-solid fa-circle-info"></i> Présentation du projet</div>
-
-        <div class="sae-grid" style="grid-template-columns: 1.3fr 1.7fr; margin-bottom: 24px;">
-
-            <!-- CONTEXTE -->
-            <div class="sae-card sae-card--accent">
-                <div class="card-header">
-                    <div class="card-icon"><i class="fa-solid fa-circle-info"></i></div>
-                    <div>
-                        <h2>Contexte</h2>
-                        <p>Mise en situation industrielle</p>
                     </div>
                 </div>
-                <p class="context-text">
-                    Lors de la SAE 2.4, nous avons reçu une <strong>phase d'usinage réalisée par un camarade en SAE 2.3</strong>. 
-                    À partir de cette phase, nous devions réaliser l'ensemble des calculs vus en cours d'OPI :
-                </p>
-                <ul style="list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:8px;">
-                    <li style="display:flex;align-items:flex-start;gap:8px;font-size:0.87rem;color:var(--text-sub);">
-                        <i class="fa-solid fa-chevron-right" style="color:var(--primary);font-size:0.7rem;margin-top:4px;flex-shrink:0;"></i>
-                        Calcul des indicateurs <strong style="color:var(--text-main);">Top, Tcyeff, Takt, Charge, Capacité horaire</strong>
-                    </li>
-                    <li style="display:flex;align-items:flex-start;gap:8px;font-size:0.87rem;color:var(--text-sub);">
-                        <i class="fa-solid fa-chevron-right" style="color:var(--primary);font-size:0.7rem;margin-top:4px;flex-shrink:0;"></i>
-                        Élaboration de la <strong style="color:var(--text-main);">fiche de suivi</strong> de production
-                    </li>
-                    <li style="display:flex;align-items:flex-start;gap:8px;font-size:0.87rem;color:var(--text-sub);">
-                        <i class="fa-solid fa-chevron-right" style="color:var(--primary);font-size:0.7rem;margin-top:4px;flex-shrink:0;"></i>
-                        Mise en place du <strong style="color:var(--text-main);">Visual Management</strong> (affichage général)
-                    </li>
-                    <li style="display:flex;align-items:flex-start;gap:8px;font-size:0.87rem;color:var(--text-sub);">
-                        <i class="fa-solid fa-chevron-right" style="color:var(--primary);font-size:0.7rem;margin-top:4px;flex-shrink:0;"></i>
-                        Vérification sur le terrain avec <strong style="color:var(--text-main);">validation de Tcyeff</strong>
-                    </li>
-                </ul>
+                <div class="kpi-card">
+                    <div class="kpi-icon"><i class="fa-solid fa-stopwatch"></i></div>
+                    <div class="kpi-value">28,42 min</div>
+                    <div class="kpi-label">Takt (1080 / 38 pièces)</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                    <div class="kpi-value">433 sec</div>
+                    <div class="kpi-label">Top ≈ 7,22 min</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="kpi-value">675 sec</div>
+                    <div class="kpi-label">Tcyeff ≈ 11,25 min</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon"><i class="fa-solid fa-industry"></i></div>
+                    <div class="kpi-value">5 pcs/h</div>
+                    <div class="kpi-label">Capacité horaire (60/Tcyeff)</div>
+                </div>
+                <div class="kpi-card kpi-card--highlight">
+                    <div class="kpi-icon"><i class="fa-solid fa-percent"></i></div>
+                    <div class="kpi-value">42 %</div>
+                    <div class="kpi-label">Taux de charge (Charge / Capacité)</div>
+                </div>
             </div>
 
-            <!-- JOURNAL DE BORD -->
-            <div class="sae-card">
-                <div class="card-header">
-                    <div class="card-icon"><i class="fa-solid fa-book-open"></i></div>
-                    <div>
-                        <h2>Journal de bord</h2>
-                        <p>6 articles — Suivi chronologique</p>
-                    </div>
+            <!-- Détail formules -->
+            <div class="formule-box" style="margin-top:24px;">
+                <div class="formule-row">
+                    <span class="formule-label">Tcyeff</span>
+                    <span class="formule-eq">= Top / (Tq × Tp × Do)</span>
+                    <span class="formule-vals">Tq=0,95 · Tp=0,75 · Do=0,9</span>
                 </div>
-                <div class="journal-list">
+                <div class="formule-row">
+                    <span class="formule-label">Top</span>
+                    <span class="formule-eq">= Mise en place + Usinage + Ébavurage + Mesure + Fiche de contrôle</span>
+                    <span class="formule-vals">30 + 43 + 30 + 300 + 30 = 433 sec</span>
+                </div>
+                <div class="formule-row">
+                    <span class="formule-label">Charge</span>
+                    <span class="formule-eq">= 40 × Tcyeff</span>
+                    <span class="formule-vals">= 450 min → 7,5 h</span>
+                </div>
+                <div class="formule-row">
+                    <span class="formule-label">Capacité</span>
+                    <span class="formule-eq">= Ouverture − Réglage machine</span>
+                    <span class="formule-vals">= 17,5 h</span>
+                </div>
+            </div>
 
-                    <div class="journal-entry open">
-                        <div class="journal-entry-header">
-                            <span class="journal-entry-title">Remédiation 2</span>
-                            <span class="journal-date"><i class="fa-regular fa-calendar"></i> 07 avril 2026, 11h29 <i class="fa-solid fa-chevron-down journal-chevron"></i></span>
-                        </div>
-                        <div class="journal-tasks-wrapper">
-                            <div class="journal-tasks">
-                                <span class="journal-task">Validation et changement de quelque poste d'usinage</span>
-                                <span class="journal-task">Atelier pour vérifier et compréhension de son poste</span>
-                            </div>
-                        </div>
+            <!-- Télécharger PowerPoint -->
+            <div class="pdf-open-row" style="margin-top:20px;">
+                <div class="pdf-open-card">
+                    <i class="fa-solid fa-file-powerpoint" style="color:#d97706;font-size:1.6rem;flex-shrink:0;"></i>
+                    <div style="flex:1;">
+                        <div class="doc-name">Présentation calculs SAÉ 2.4</div>
+                        <div class="doc-file">SAE2_4.pdf</div>
                     </div>
-
-                    <div class="journal-entry">
-                        <div class="journal-entry-header">
-                            <span class="journal-entry-title">Autonomie 4</span>
-                            <span class="journal-date"><i class="fa-regular fa-calendar"></i> 07 avril 2026, 11h27 <i class="fa-solid fa-chevron-down journal-chevron"></i></span>
-                        </div>
-                        <div class="journal-tasks-wrapper">
-                            <div class="journal-tasks">
-                                <span class="journal-task">Affectation des postes d'usinage</span>
-                                <span class="journal-task">Fiche de suivie généralisé</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="journal-entry">
-                        <div class="journal-entry-header">
-                            <span class="journal-entry-title">Autonomie 3</span>
-                            <span class="journal-date"><i class="fa-regular fa-calendar"></i> 01 avril 2026, 11h14 <i class="fa-solid fa-chevron-down journal-chevron"></i></span>
-                        </div>
-                        <div class="journal-tasks-wrapper">
-                            <div class="journal-tasks">
-                                <span class="journal-task">Fiche de contrôle finie</span>
-                                <span class="journal-task">Amélioration du portefolio</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="journal-entry">
-                        <div class="journal-entry-header">
-                            <span class="journal-entry-title">Autonomie 2</span>
-                            <span class="journal-date"><i class="fa-regular fa-calendar"></i> 01 avril 2026, 11h13 <i class="fa-solid fa-chevron-down journal-chevron"></i></span>
-                        </div>
-                        <div class="journal-tasks-wrapper">
-                            <div class="journal-tasks">
-                                <span class="journal-task">Organisation du Excel général</span>
-                                <span class="journal-task">Finalisation de la fiche de suivie</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="journal-entry">
-                        <div class="journal-entry-header">
-                            <span class="journal-entry-title">Remédiation 1</span>
-                            <span class="journal-date"><i class="fa-regular fa-calendar"></i> 01 avril 2026, 11h10 <i class="fa-solid fa-chevron-down journal-chevron"></i></span>
-                        </div>
-                        <div class="journal-tasks-wrapper">
-                            <div class="journal-tasks">
-                                <span class="journal-task">Validation de mes données</span>
-                                <span class="journal-task">Début de la fiche de suivie</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="journal-entry">
-                        <div class="journal-entry-header">
-                            <span class="journal-entry-title">Autonomie 1 (4h)</span>
-                            <span class="journal-date"><i class="fa-regular fa-calendar"></i> 01 avril 2026, 11h08 <i class="fa-solid fa-chevron-down journal-chevron"></i></span>
-                        </div>
-                        <div class="journal-tasks-wrapper">
-                            <div class="journal-tasks">
-                                <span class="journal-task">Calculs (Top, Tcy, Tcyeff, charge, capacité horaire, takt…)</span>
-                                <span class="journal-task">Condensé en 1 PowerPoint</span>
-                            </div>
-                        </div>
-                    </div>
-
+                    <a href="SAE2_4.pdf" download class="pdf-open-btn" style="background:#d97706;">
+                        <i class="fa-solid fa-download"></i> Télécharger
+                    </a>
+                    <a href="SAE2_4.pdf" target="_blank" class="pdf-open-btn">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Ouvrir
+                    </a>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- ROW 2 : Indicateurs + TRS + Calculs -->
-        <div class="section-label"><i class="fa-solid fa-calculator"></i> Indicateurs & Calculs OPI</div>
+    <!-- ══════════════════════════════════════════
+         ÉTAPE 2 : Sur le terrain — organisation
+    ══════════════════════════════════════════ -->
+<section class="sae-step">
+    <div class="step-header">
+        <div class="step-num">02</div>
+        <div>
+            <h3>Organisation sur le terrain</h3>
+            <p class="step-sub">Flux de pièces, zone de mesure et management visuel</p>
+        </div>
+    </div>
 
-        <div class="sae-grid" style="grid-template-columns: 1fr 1fr 1fr; margin-bottom: 24px;">
+    <div class="step-content">
+        <div class="image-container" style="margin-bottom: 24px; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;">
+            <img src="terrain.png" alt="Organisation du poste SAE 2.4" style="width: 100%; display: block;">
+            <div style="background: #f8fafc; padding: 10px; font-size: 0.85rem; color: #64748b; font-style: italic; border-top: 1px solid #e2e8f0;">
+                <i class="fa-solid fa-camera"></i> Implantation réelle du poste : flux physique et zones de contrôle.
+            </div>
+        </div>
 
-            <!-- KPI -->
-            <div class="sae-card">
-                <div class="card-header">
-                    <div class="card-icon"><i class="fa-solid fa-gauge-high"></i></div>
-                    <div>
-                        <h2>Données de production</h2>
-                        <p>Théorie — 38 pièces</p>
+        <p>Le placement des boite de depôt a été optimisée pour réduire les déplacements et la reflexion necesair a l'operateur. en des zones distinctes : l'<strong>arrivée des pièces</strong>, la zone de <strong>mesure</strong> et la <strong>zone de rebut</strong>.</p>
+
+        <div class="two-col-grid" style="margin-top:24px;">
+            <div class="info-column">
+                <div class="info-block">
+                    <div class="info-block-header">
+                        <i class="fa-solid fa-microscope" style="color:var(--primary);"></i>
+                        <span>Zone de Mesure</span>
                     </div>
+                    <p style="font-size: 0.9rem;">Avec une feuille de contrôle et des outils de mesure : pied à coulisse, jauge de profondeur et peigne à filetage</p>
                 </div>
-                <div class="kpi-grid">
-                    <div class="kpi-item">
-                        <div class="kpi-value">38</div>
-                        <div class="kpi-label">Pièces théorie</div>
+
+                <div class="info-block" style="margin-top:16px;">
+                    <div class="info-block-header">
+                        <i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b;"></i>
+                        <span>Performance (Tcyeff, Tq)</span>
                     </div>
-                    <div class="kpi-item">
-                        <div class="kpi-value">1080</div>
-                        <div class="kpi-label">To (min)</div>
-                        <div class="kpi-formula">Temps d'ouverture</div>
-                    </div>
-                    <div class="kpi-item">
-                        <div class="kpi-value">28.42</div>
-                        <div class="kpi-label">Takt (min)</div>
-                        <div class="kpi-formula">1080 / 38</div>
-                    </div>
-                    <div class="kpi-item">
-                        <div class="kpi-value">42%</div>
-                        <div class="kpi-label">Taux de charge</div>
-                        <div class="kpi-formula">Charge / Capacité</div>
-                    </div>
-                    <div class="kpi-item">
-                        <div class="kpi-value">7.5h</div>
-                        <div class="kpi-label">Charge</div>
-                        <div class="kpi-formula">40 × Tcyeff</div>
-                    </div>
-                    <div class="kpi-item">
-                        <div class="kpi-value">17.5h</div>
-                        <div class="kpi-label">Capacité</div>
-                        <div class="kpi-formula">To − réglage</div>
+                    <p>grace a la zone indicateur nous pouvons placer un ordinateur ou une tablette afin de noté ou visualiser les different suivi. </p>
+                    <div class="alert-chip">
+                        <i class="fa-solid fa-bell"></i> Tcyeff > 675 sec
                     </div>
                 </div>
             </div>
 
-            <!-- TRS -->
-            <div class="sae-card">
-                <div class="card-header">
-                    <div class="card-icon"><i class="fa-solid fa-rotate"></i></div>
-                    <div>
-                        <h2>TRS</h2>
-                        <p>Taux de Rendement Synthétique</p>
-                    </div>
+            <div class="info-block">
+                <div class="info-block-header">
+                    <i class="fa-solid fa-arrows-turn-right" style="color:var(--primary);"></i>
+                    <span>Flux de production</span>
                 </div>
-                <div class="trs-display">
-                    <div class="trs-formula">Tq × Tp × Do</div>
-                    <div class="trs-value" id="trs-val">—</div>
-                    <div class="trs-sub">Tq = 0.95 &nbsp;|&nbsp; Tp = 0.75 &nbsp;|&nbsp; Do = 0.9</div>
-                    <div class="trs-bar-wrap">
-                        <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--text-sub);margin-bottom:6px;">
-                            <span>0%</span><span>50%</span><span>100%</span>
-                        </div>
-                        <div class="trs-bar-bg">
-                            <div class="trs-bar-fill" id="trs-bar"></div>
-                        </div>
-                    </div>
-                    <div class="alert-banner" style="margin-top:14px;width:100%;box-sizing:border-box;">
-                        <i class="fa-solid fa-bell"></i>
-                        <p>Alerte si <strong>Tcyeff > 675 sec</strong> sur le terrain</p>
-                    </div>
+                <div class="flux-steps">
+                    <div class="flux-step"><div class="flux-dot"></div><span>Arrivée pièce brute (boite)</span></div>
+                    <div class="flux-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+                    <div class="flux-step"><div class="flux-dot"></div><span>Usinage (Machine)</span></div>
+                                        <div class="flux-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+                    <div class="flux-step"><div class="flux-dot"></div><span>Mesure (Zone de mesure)</span></div>
+                    <div class="flux-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+                    <div class="flux-step flux-step--ok"><div class="flux-dot flux-dot--ok"></div><span>Validation : Pièce bonne ✅</span></div>
+                    <div class="flux-step flux-step--ko"><div class="flux-dot flux-dot--ko"></div><span>Écart : Rebut (Sous la table) ❌</span></div>
                 </div>
             </div>
-
-            <!-- CALCULS DÉTAILS -->
-            <div class="sae-card">
-                <div class="card-header">
-                    <div class="card-icon"><i class="fa-solid fa-function"></i></div>
-                    <div>
-                        <h2>Calculs détaillés</h2>
-                        <p>Terrain vs Théorie</p>
-                    </div>
-                </div>
-                <div class="calc-grid">
-                    <div class="calc-block">
-                        <h4>Théorie</h4>
-                        <div class="calc-row">
-                            <span class="calc-label">To</span>
-                            <span class="calc-value">≈ 1080 min</span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">Takt</span>
-                            <span class="calc-value">28.42 min</span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">→ 1080/38</span>
-                            <span class="calc-value" style="color:var(--primary);">✓</span>
-                        </div>
-                    </div>
-                    <div class="calc-block">
-                        <h4>Sur le terrain</h4>
-                        <div class="calc-row">
-                            <span class="calc-label">To</span>
-                            <span class="calc-value" style="color:var(--primary);">À déterminer</span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">Takt</span>
-                            <span class="calc-value" style="color:var(--primary);">À déterminer</span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">TRS</span>
-                            <span class="calc-value" style="color:var(--primary);">À déterminer</span>
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top:14px;">
-                    <div class="calc-row" style="border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:10px 14px;background:rgba(59,130,246,0.05);">
-                        <span class="calc-label">Vérification Tcyeff</span>
-                        <span class="status-warn">Alerte &lt; 675 s</span>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
-        <!-- ROW 3 : Fiche de suivi -->
-        <div class="section-label"><i class="fa-solid fa-table-list"></i> Fiche de suivi connectée à l'affichage général</div>
+    
+    </div>
+</section>
 
-        <div class="sae-card sae-card--full" style="margin-bottom: 24px;">
-            <div class="card-header">
-                <div class="card-icon"><i class="fa-solid fa-table"></i></div>
+    <!-- ══════════════════════════════════════════
+         ÉTAPE 3 : Fiche de suivi
+    ══════════════════════════════════════════ -->
+    <section class="sae-step">
+        <div class="step-header">
+            <div class="step-num">03</div>
+            <div>
+                <h3>Fiche de suivi / Fiche de contôle</h3>
+                <p class="step-sub">saisies par l'opérateur à chaque cycle d'usinage</p>
+            </div>
+        </div>
+        <div class="step-content">
+            <p>La fiche de suivi permet de collecter en temps réel les données de production. L'opérateur renseigne :</p>
+
+            <!-- 2 colonnes : liste + téléchargement -->
+            <div class="two-col-grid" style="margin-top:20px;">
                 <div>
-                    <h2>Fiche de suivi — Production stabilisée</h2>
-                    <p>Connectée à l'affichage général (Visual Management)</p>
+                    <ul class="check-list">
+                        <li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Heure de démarrage de cycle
+                        </li>                        
+                        <li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Heure début usinage</li>
+                        <li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Heure fin usinage</li>
+                        <li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Conformité</li>
+                        <li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Côtes</li>
+                    </ul>
                 </div>
-            </div>
-            <div style="overflow-x:auto;">
-                <table class="fiche-table">
-                    <thead>
-                        <tr>
-                            <th>Phase</th>
-                            <th>Machine</th>
-                            <th>Opération</th>
-                            <th>Tcyeff (s)</th>
-                            <th>Takt (min)</th>
-                            <th>Charge</th>
-                            <th>Statut</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Phase reçue (SAE 2.3)</strong></td>
-                            <td>Tour CN</td>
-                            <td>Tournage extérieur + chariotage</td>
-                            <td>680 s</td>
-                            <td>28.42 min</td>
-                            <td>7.5 h</td>
-                            <td><span class="status-ok">✓ OK</span></td>
-                        </tr>
-                        <tr>
-                            <td>Contrôle dimensionnel</td>
-                            <td>MMT / Pied</td>
-                            <td>Vérification cotes ISO</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td><span class="status-ok">✓ Validé</span></td>
-                        </tr>
-                        <tr>
-                            <td>Fiche de suivi Excel</td>
-                            <td>—</td>
-                            <td>Organisation des données générales</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td><span class="status-ok">✓ Finalisé</span></td>
-                        </tr>
-                        <tr>
-                            <td>Visual Management</td>
-                            <td>—</td>
-                            <td>Affichage indicateurs en temps réel</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td><span class="status-warn">⚠ En cours</span></td>
-                        </tr>
-                        <tr style="border-top:2px solid rgba(59,130,246,0.2);">
-                            <td><strong>Seuil d'alerte</strong></td>
-                            <td colspan="2" style="color:var(--text-sub);font-style:italic;">Tcyeff &lt; 675 s → Déclenchement alerte</td>
-                            <td><strong style="color:#ef4444;">675 s</strong></td>
-                            <td colspan="2">—</td>
-                            <td><span class="status-alert">⚠ Alerte</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- ROW 4 : Livrables + Compétences -->
-        <div class="sae-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 24px;">
-
-            <!-- LIVRABLES -->
-            <div class="sae-card">
-                <div class="card-header">
-                    <div class="card-icon"><i class="fa-solid fa-folder-open"></i></div>
-                    <div>
-                        <h2>Livrables produits</h2>
-                        <p>Documents et fichiers rendus</p>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div class="pdf-open-card">
+                        <i class="fa-solid fa-file-excel" style="color:#22c55e;font-size:1.5rem;flex-shrink:0;"></i>
+                        <div style="flex:1;">
+                            <div class="doc-name">Fiche de suivi (connectée)</div>
+                            <div class="doc-file">fiche_suivi_SAE24.xlsx</div>
+                        </div>
+                        <a href="fiche_suivi_SAE24.xlsx" download class="pdf-open-btn" style="background:#22c55e;">
+                            <i class="fa-solid fa-download"></i> Télécharger
+                        </a>
                     </div>
-                </div>
-                <div class="livrable-list">
-                    <a href="#" class="livrable-item">
-                        <div class="livrable-icon"><i class="fa-solid fa-file-powerpoint"></i></div>
-                        <div>
-                            <div class="livrable-name">PowerPoint des calculs OPI</div>
-                            <div class="livrable-desc">Top, Tcyeff, Takt, Charge, Capacité — condensé en 1 présentation</div>
-                        </div>
-                        <i class="fa-solid fa-chevron-right livrable-arrow"></i>
-                    </a>
-                    <a href="#" class="livrable-item">
-                        <div class="livrable-icon"><i class="fa-solid fa-file-excel"></i></div>
-                        <div>
-                            <div class="livrable-name">Fiche de suivi Excel (générale)</div>
-                            <div class="livrable-desc">Connectée à l'affichage général — Visual Management</div>
-                        </div>
-                        <i class="fa-solid fa-chevron-right livrable-arrow"></i>
-                    </a>
-                    <a href="#" class="livrable-item">
-                        <div class="livrable-icon"><i class="fa-solid fa-clipboard-check"></i></div>
-                        <div>
-                            <div class="livrable-name">Fiche de contrôle finale</div>
-                            <div class="livrable-desc">Validation dimensionnelle de la phase reçue</div>
-                        </div>
-                        <i class="fa-solid fa-chevron-right livrable-arrow"></i>
-                    </a>
-                    <a href="#" class="livrable-item">
-                        <div class="livrable-icon"><i class="fa-solid fa-chart-bar"></i></div>
-                        <div>
-                            <div class="livrable-name">Affichage général (Visual Management)</div>
-                            <div class="livrable-desc">Tableau de bord atelier — indicateurs en temps réel</div>
-                        </div>
-                        <i class="fa-solid fa-chevron-right livrable-arrow"></i>
-                    </a>
+
                 </div>
             </div>
 
-            <!-- COMPÉTENCES -->
-            <div class="sae-card">
-                <div class="card-header">
-                    <div class="card-icon"><i class="fa-solid fa-star"></i></div>
-                    <div>
-                        <h2>Compétences mobilisées</h2>
-                        <p>Savoir-faire mis en œuvre</p>
-                    </div>
-                </div>
-
-                <div style="margin-bottom:18px;">
-                    <p style="font-size:0.82rem;color:var(--text-sub);margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">Techniques</p>
-                    <div class="comp-pill-list">
-                        <span class="comp-pill"><i class="fa-solid fa-calculator"></i> Calcul Top / Tcy / Tcyeff</span>
-                        <span class="comp-pill"><i class="fa-solid fa-clock"></i> Takt time</span>
-                        <span class="comp-pill"><i class="fa-solid fa-gauge"></i> Taux de charge</span>
-                        <span class="comp-pill"><i class="fa-solid fa-rotate"></i> TRS (Tq·Tp·Do)</span>
-                        <span class="comp-pill"><i class="fa-solid fa-table"></i> Fiche de suivi</span>
-                        <span class="comp-pill"><i class="fa-solid fa-eye"></i> Visual Management</span>
-                    </div>
-                </div>
-
-                <div style="margin-bottom:18px;">
-                    <p style="font-size:0.82rem;color:var(--text-sub);margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">Logiciels</p>
-                    <div class="comp-pill-list">
-                        <span class="comp-pill" style="color:#22c55e;border-color:rgba(34,197,94,0.2);background:rgba(34,197,94,0.08);">
-                            <i class="fa-solid fa-file-excel"></i> Excel
-                        </span>
-                        <span class="comp-pill" style="color:#f97316;border-color:rgba(249,115,22,0.2);background:rgba(249,115,22,0.08);">
-                            <i class="fa-solid fa-file-powerpoint"></i> PowerPoint
-                        </span>
-                    </div>
-                </div>
-
+            <!-- Connexion affichage général -->
+            <div class="conn-banner" style="margin-top:20px;">
+                <div class="conn-dot"></div>
                 <div>
-                    <p style="font-size:0.82rem;color:var(--text-sub);margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">Savoir-être</p>
-                    <div class="comp-pill-list">
-                        <span class="comp-pill" style="color:#a78bfa;border-color:rgba(167,139,250,0.2);background:rgba(167,139,250,0.08);">
-                            <i class="fa-solid fa-users"></i> Collaboration
-                        </span>
-                        <span class="comp-pill" style="color:#a78bfa;border-color:rgba(167,139,250,0.2);background:rgba(167,139,250,0.08);">
-                            <i class="fa-solid fa-magnifying-glass"></i> Rigueur analytique
-                        </span>
-                        <span class="comp-pill" style="color:#a78bfa;border-color:rgba(167,139,250,0.2);background:rgba(167,139,250,0.08);">
-                            <i class="fa-solid fa-clock-rotate-left"></i> Autonomie
-                        </span>
+                    <strong>Fiche connectée à l'affichage centrale sur la télévision</strong>
+                    <p style="font-size:0.85rem;color:var(--text-sub);margin:0;">Les données saisies dans la fiche met a jours l'affichage centrale (télévision).</p>
+                </div>
+                <i class="fa-solid fa-link" style="color:var(--primary);font-size:1.2rem;margin-left:auto;"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         ÉTAPE 4 : Visual Management & TRS
+    ══════════════════════════════════════════ -->
+    <section class="sae-step">
+        <div class="step-header">
+            <div class="step-num">04</div>
+            <div>
+                <h3>Usinage</h3>
+                <p class="step-sub">Session d'usinage de 18 heure</p>
+            </div>
+        </div>
+        <div class="step-content">
+            <p>L'<strong>l'usinage</strong> en cours <strong>18 heure</strong> une semaine d'usinage avec un phase attribuée .</p>
+
+            <!-- 3 colonnes TRS -->
+            <div class="trs-grid" style="margin-top:22px;">
+                <div class="trs-card">
+                    <div class="trs-letter">Nombres de pièces</div>
+                    <div class="trs-val">30</div>
+                    <div class="trs-desc"></div>
+                </div>
+                <div class="trs-card">
+                    <div class="trs-letter">Support</div>
+                    <div class="trs-val">Phase 10</div>
+                    <div class="trs-desc"></div>
+                </div>
+                <div class="trs-card trs-card--do">
+                    <div class="trs-letter">Bonne</div>
+                    <div class="trs-val">???</div>
+                    <div class="trs-desc"></div>
+                </div>
+            </div>
+
+            <div class="trs-result">
+                <span>Tq</span>
+                <span class="trs-result-val">= ???</span>
+            </div>
+
+            <!-- Note Visual Management -->
+            <div class="info-block" style="margin-top:20px;">
+                <div class="info-block-header">
+                    <i class="fa-solid fa-display" style="color:var(--primary);"></i>
+                    <span>Avis general</span>
+                </div>
+                <p>a determiner en fin de semaine</p>
+            </div>
+        </div>
+    </section>
+ <!-- ════════════════════════════════
+         Journal de bord
+    ════════════════════════════════ -->
+    <section class="sae-step">
+        <div class="step-header">
+            <div class="step-num" style="background:rgba(148,163,184,0.12);color:var(--text-sub);border-color:rgba(148,163,184,0.2);">+</div>
+            <div>
+                <h3>Annexe</h3>
+                <p class="step-sub">Journal de bord</p>
+            </div>
+        </div>
+        <div class="step-content">
+            <p>J'ai tenu un <strong>journal de bord</strong> tout au long de la SAÉ afin de suivre mon avancée au fil des séances d'autonomie.</p>
+
+
+            <!-- PDF -->
+            <div class="pdf-open-row" style="margin-top:14px;">
+                <div class="pdf-open-card">
+                    <i class="fa-solid fa-file-pdf" style="color:#ef4444;font-size:1.6rem;flex-shrink:0;"></i>
+                    <div style="flex:1;">
+                        <div class="doc-name">Journal de bord complet</div>
+                        <div class="doc-file">journal_de_bord.pdf</div>
                     </div>
-                </div>
-
-                <div class="alert-banner" style="margin-top:20px;">
-                    <i class="fa-solid fa-link"></i>
-                    <p>Lien avec la <strong>SAE 2.3</strong> (gamme d'usinage reçue) — Voir page SAE 2.3</p>
+                    <a href="journal_de_bord.pdf" target="_blank" class="pdf-open-btn">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Ouvrir
+                    </a>
                 </div>
             </div>
         </div>
+    </section>
+    <!-- ══════════════════════════════════════════
+         ANNEXE : Documents à télécharger
 
-        <!-- CTA -->
-        <div style="text-align:center;padding:50px 30px;background:var(--bg-card);border-radius:24px;border:1px solid rgba(59,130,246,0.15);box-shadow:var(--card-shadow);">
-            <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:10px;">Voir mes autres projets</h2>
-            <p style="color:var(--text-sub);margin-bottom:24px;">Découvrez l'ensemble de mes SAE et réalisations en BUT GMP</p>
-            <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;">
-                <a href="../../../../projets.html" class="btn-primary"><i class="fa-solid fa-folder-open" style="margin-right:8px;"></i> Tous mes projets</a>
-                <a href="../../../../contact.html" class="btn-secondary">Me contacter <i class="fa-solid fa-paper-plane"></i></a>
+    <section class="sae-step">
+        <div class="step-header">
+            <div class="step-num" style="background:rgba(148,163,184,0.12);color:var(--text-sub);border-color:rgba(148,163,184,0.2);">+</div>
+            <div>
+                <h3>Annexe — Tous les documents</h3>
+                <p class="step-sub">Téléchargement de l'ensemble des livrables</p>
             </div>
         </div>
+        <div class="step-content">
+            <div class="docs-grid">
 
-    </main>
+                <div class="pdf-open-card">
+                    <i class="fa-solid fa-file-powerpoint" style="color:#d97706;font-size:1.5rem;flex-shrink:0;"></i>
+                    <div style="flex:1;">
+                        <div class="doc-name">Présentation des calculs</div>
+                        <div class="doc-file">SAE2_4.pdf</div>
+                    </div>
+                    <a href="SAE2_4.pdf" download class="pdf-open-btn" style="background:#d97706;">
+                        <i class="fa-solid fa-download"></i> Télécharger
+                    </a>
+                    <a href="SAE2_4.pdf" target="_blank" class="pdf-open-btn">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Ouvrir
+                    </a>
+                </div>
 
-    <!-- Bouton retour en haut -->
-    <a href="#" id="back-top" class="back-btn-floating" aria-label="Retour en haut">
-        <i class="fa-solid fa-chevron-up"></i>
-    </a>
+                <div class="pdf-open-card">
+                    <i class="fa-solid fa-file-excel" style="color:#22c55e;font-size:1.5rem;flex-shrink:0;"></i>
+                    <div style="flex:1;">
+                        <div class="doc-name">Fiche de suivi connectée</div>
+                        <div class="doc-file">fiche_suivi_SAE24.xlsx</div>
+                    </div>
+                    <a href="fiche_suivi_SAE24.xlsx" download class="pdf-open-btn" style="background:#22c55e;">
+                        <i class="fa-solid fa-download"></i> Télécharger
+                    </a>
+                </div>
 
-    <script>
-        // Thème
-        const btn = document.getElementById("theme-toggle");
-        const icon = btn.querySelector("i");
-        function updateIcon() {
-            if (document.documentElement.classList.contains("light-mode")) {
-                icon.className = "fa-solid fa-sun";
-            } else {
-                icon.className = "fa-solid fa-moon";
-            }
-        }
-        updateIcon();
-        btn.addEventListener("click", () => {
-            const isLight = document.documentElement.classList.toggle("light-mode");
-            localStorage.setItem("theme", isLight ? "light" : "dark");
-            updateIcon();
-        });
+                <div class="pdf-open-card">
+                    <i class="fa-solid fa-file-pdf" style="color:#ef4444;font-size:1.5rem;flex-shrink:0;"></i>
+                    <div style="flex:1;">
+                        <div class="doc-name">Fiche d'instruction opérateur</div>
+                        <div class="doc-file">fiche_instruction_SAE24.pdf</div>
+                    </div>
+                    <a href="fiche_instruction_SAE24.pdf" download class="pdf-open-btn">
+                        <i class="fa-solid fa-download"></i> Télécharger
+                    </a>
+                    <a href="fiche_instruction_SAE24.pdf" target="_blank" class="pdf-open-btn" style="background:transparent;border:1px solid rgba(59,130,246,0.35);color:#60a5fa !important;">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Ouvrir
+                    </a>
+                </div>
 
-        // Retour en haut
-        const backBtn = document.getElementById("back-top");
-        window.addEventListener("scroll", () => {
-            backBtn.classList.toggle("visible", window.scrollY > 300);
-        });
-        backBtn.addEventListener("click", e => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        });
+            </div>
+        </div>
+    </section>
+    ══════════════════════════════════════════ -->
+    <!-- BILAN -->
+    <div class="sae-bilan" id="bilan">
+        <div class="bilan-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <div>
+            <h3>Ce que j'ai appris</h3>
+            <p>Cette SAÉ n'est pas finie, mais m'a permis de comprendre avec un cas réel l'utilisation des indicateurs de production (Takt, Top, Tcyeff, TRS). Le fait de travailler sur une phase créée par un camarade permet d'analyser un document technique réel. Puis vient la partie usinage qui est en cours...</p>
+        </div>
+    </div>
 
-        // Journal accordéon
-        document.querySelectorAll(".journal-entry").forEach(entry => {
-            entry.querySelector(".journal-entry-header").addEventListener("click", () => {
-                entry.classList.toggle("open");
-            });
-        });
+</main>
 
-        // TRS animé
-        const trsVal = document.getElementById("trs-val");
-        const trsBar = document.getElementById("trs-bar");
-        const trs = 0.95 * 0.75 * 0.9;
-        const trsPercent = Math.round(trs * 100);
+<a href="#" id="back-top" class="back-btn-floating" aria-label="Retour en haut">
+    <i class="fa-solid fa-chevron-up"></i>
+</a>
 
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    trsVal.textContent = trsPercent + "%";
-                    trsBar.style.width = trsPercent + "%";
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.3 });
+<style>
+/* ── Badge UE orange ── */
+.ue-orange { background: rgba(60, 251, 92, 0.12); color: #92ffad; border: 1px solid #31ff6540; }
 
-        observer.observe(document.querySelector(".trs-display"));
+/* ── Bouton scroll bilan ── */
+.btn-scroll-bilan {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 20px;
+    background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.3);
+    color: #60a5fa; padding: 10px 20px; border-radius: 99px;
+    font-size: 0.88rem; font-weight: 700; text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+}
+.btn-scroll-bilan:hover { background: rgba(59,130,246,0.22); transform: translateY(-2px); }
+.light-mode .btn-scroll-bilan { color: #2563eb; }
 
-        // Barres de progression des cartes
-        const barObserver = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const bar = entry.target;
-                    bar.style.width = bar.getAttribute("data-width") + "%";
-                    barObserver.unobserve(bar);
-                }
-            });
-        }, { threshold: 0.3 });
+/* ── comp-tags flex-wrap ── */
+.comp-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.comp-tags span { white-space: normal; word-break: break-word; }
 
-        document.querySelectorAll(".comp-bar-fill").forEach(bar => barObserver.observe(bar));
-    </script>
+/* ── Intro card ── */
+.sae-intro-card {
+    display: flex; gap: 30px; align-items: flex-start;
+    background: var(--bg-card); border-radius: 20px; padding: 35px;
+    border: 1px solid rgba(59,130,246,0.15); box-shadow: var(--card-shadow); margin-bottom: 50px;
+}
+.sae-intro-left { display: flex; flex-direction: column; align-items: center; gap: 12px; min-width: 100px; }
+.sae-num-big {
+    font-family: monospace; font-size: 1rem; font-weight: 800;
+    color: var(--primary); background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.25);
+    padding: 6px 14px; border-radius: 8px; letter-spacing: 0.05em; white-space: nowrap;
+}
+.ue-badge { font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 99px; white-space: nowrap; }
+.sae-intro-right h2 { font-size: 1.6rem; font-weight: 900; margin-bottom: 12px; line-height: 1.2; }
+.sae-intro-right p { color: var(--text-sub); font-size: 0.95rem; line-height: 1.7; }
+
+/* ── Steps ── */
+.sae-step { margin-bottom: 40px; }
+.step-header { display: flex; align-items: center; gap: 18px; margin-bottom: 20px; }
+.step-num {
+    width: 48px; height: 48px; min-width: 48px;
+    background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    font-family: monospace; font-size: 1rem; font-weight: 900; color: var(--primary);
+}
+.step-header h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 4px; }
+.step-sub { color: var(--text-sub); font-size: 0.88rem; }
+.step-content {
+    background: var(--bg-card); border-radius: 16px; padding: 28px;
+    border: 1px solid rgba(255,255,255,0.05); box-shadow: var(--card-shadow);
+}
+.light-mode .step-content { border-color: rgba(0,0,0,0.06); }
+.step-content > p { color: var(--text-sub); font-size: 0.93rem; line-height: 1.7; }
+.step-content > p strong { color: var(--text-main); }
+
+/* ── KPI grid ── */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+.kpi-card {
+    background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.14);
+    border-radius: 14px; padding: 18px 16px; text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.kpi-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(59,130,246,0.2); }
+.kpi-card--highlight { border-color: rgba(34,197,94,0.3); background: rgba(34,197,94,0.07); }
+.kpi-card--highlight .kpi-value { color: #22c55e; }
+.kpi-icon { font-size: 1.3rem; color: var(--primary); margin-bottom: 8px; }
+.kpi-card--highlight .kpi-icon { color: #22c55e; }
+.kpi-value { font-size: 1.35rem; font-weight: 900; color: var(--primary); letter-spacing: -0.5px; }
+.kpi-label { font-size: 0.75rem; color: var(--text-sub); margin-top: 4px; line-height: 1.4; }
+
+/* ── Formules ── */
+.formule-box {
+    background: rgba(0,0,0,0.12); border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05); overflow: hidden;
+}
+.light-mode .formule-box { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.07); }
+.formule-row {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+    padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.85rem;
+}
+.light-mode .formule-row { border-bottom-color: rgba(0,0,0,0.06); }
+.formule-row:last-child { border-bottom: none; }
+.formule-label {
+    font-family: monospace; font-weight: 900; color: var(--primary);
+    background: rgba(59,130,246,0.1); padding: 2px 8px; border-radius: 6px;
+    white-space: nowrap; font-size: 0.82rem;
+}
+.formule-eq { color: var(--text-main); font-weight: 600; }
+.formule-vals { color: var(--text-sub); font-size: 0.8rem; font-style: italic; }
+
+/* ── Deux colonnes ── */
+.two-col-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* ── Info block ── */
+.info-block {
+    background: rgba(59,130,246,0.05); border: 1px solid rgba(59,130,246,0.13);
+    border-radius: 14px; padding: 20px;
+}
+.info-block-header {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 800; font-size: 0.95rem; color: var(--text-main);
+    margin-bottom: 10px;
+}
+.info-block p { color: var(--text-sub); font-size: 0.88rem; line-height: 1.65; }
+.info-block p strong { color: var(--text-main); }
+
+/* ── Alerte chip ── */
+.alert-chip {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 14px;
+    background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3);
+    color: #f59e0b; padding: 7px 14px; border-radius: 99px; font-size: 0.82rem; font-weight: 700;
+}
+
+/* ── Flux pièces ── */
+.flux-steps { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+.flux-step { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; color: var(--text-sub); font-weight: 600; }
+.flux-step--ok { color: #22c55e; }
+.flux-step--ko { color: #ef4444; }
+.flux-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+.flux-dot--ok { background: #22c55e; }
+.flux-dot--ko { background: #ef4444; }
+.flux-arrow { color: var(--text-sub); font-size: 0.7rem; margin-left: 4px; }
+
+/* ── Check list ── */
+.check-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; }
+.check-list li { display: flex; align-items: flex-start; gap: 10px; color: var(--text-sub); font-size: 0.88rem; line-height: 1.5; }
+.check-list li i { margin-top: 2px; flex-shrink: 0; }
+
+/* ── Connexion banner ── */
+.conn-banner {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(34,197,94,0.07); border: 1px solid rgba(34,197,94,0.2);
+    border-radius: 12px; padding: 16px 20px;
+}
+.conn-dot {
+    width: 10px; height: 10px; min-width: 10px; border-radius: 50%;
+    background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
+    animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 3px rgba(34,197,94,0.2); }
+    50% { box-shadow: 0 0 0 6px rgba(34,197,94,0.1); }
+}
+.conn-banner strong { color: #22c55e; display: block; margin-bottom: 2px; font-size: 0.9rem; }
+
+/* ── TRS grid ── */
+.trs-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 14px;
+}
+.trs-card {
+    background: rgba(59,130,246,0.07); border: 1px solid rgba(59,130,246,0.18);
+    border-radius: 14px; padding: 20px 14px; text-align: center;
+}
+.trs-card--do { border-color: rgba(34,197,94,0.25); background: rgba(34,197,94,0.07); }
+.trs-letter { font-family: monospace; font-size: 1.2rem; font-weight: 900; color: var(--primary); margin-bottom: 6px; }
+.trs-card--do .trs-letter { color: #22c55e; }
+.trs-val { font-size: 1.8rem; font-weight: 900; color: var(--text-main); letter-spacing: -1px; }
+.trs-desc { font-size: 0.75rem; color: var(--text-sub); margin-top: 4px; }
+.trs-result {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px;
+    margin-top: 14px; background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.15);
+    border-radius: 12px; padding: 14px 20px; font-size: 1.2rem; color: var(--text-sub);
+}
+.trs-result-val { font-weight: 700; color: var(--text-main); }
+
+/* ── Docs grid (annexe) ── */
+.docs-grid { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── PDF open row ── */
+.pdf-open-row { margin-top: 20px; }
+.pdf-open-card {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    background: rgba(59,130,246,0.05); border: 1px solid rgba(59,130,246,0.14);
+    border-radius: 12px; padding: 14px 18px;
+}
+.doc-name { font-weight: 700; font-size: 0.9rem; color: var(--text-main); margin-bottom: 2px; }
+.doc-file { font-size: 0.75rem; color: var(--text-sub); font-family: monospace; }
+.pdf-open-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--primary); color: white !important;
+    border-radius: 8px; padding: 8px 16px;
+    font-size: 0.82rem; font-weight: 700; white-space: nowrap; flex-shrink: 0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.pdf-open-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(59,130,246,0.4); }
+
+/* ── Bilan ── */
+.sae-bilan {
+    background: var(--bg-card); border-radius: 20px; padding: 35px;
+    border: 1px solid rgba(59,130,246,0.15); box-shadow: var(--card-shadow);
+    display: flex; align-items: flex-start; gap: 25px; margin-top: 50px;
+}
+.bilan-icon {
+    width: 56px; height: 56px; min-width: 56px;
+    background: rgba(59,130,246,0.12); border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; color: var(--primary); border: 1px solid rgba(59,130,246,0.2);
+}
+.sae-bilan h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; }
+.sae-bilan p { color: var(--text-sub); font-size: 0.92rem; line-height: 1.65; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .trs-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+    .sae-intro-card { flex-direction: column; gap: 20px; padding: 24px; }
+    .sae-intro-left { flex-direction: row; min-width: unset; align-items: center; flex-wrap: wrap; }
+    .sae-intro-right h2 { font-size: 1.3rem; }
+    .step-content { padding: 18px; }
+    .two-col-grid { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .trs-grid { grid-template-columns: 1fr; }
+    .sae-bilan { flex-direction: column; gap: 15px; padding: 24px; }
+    .pdf-open-btn { font-size: 0.78rem; padding: 7px 12px; }
+    .conn-banner { flex-wrap: wrap; }
+    .formule-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+}
+@media (max-width: 480px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+/* ── Thème ── */
+const btn = document.getElementById("theme-toggle");
+const icon = btn.querySelector("i");
+function updateIcon() {
+    icon.className = document.documentElement.classList.contains("light-mode")
+        ? "fa-solid fa-sun" : "fa-solid fa-moon";
+}
+updateIcon();
+btn.addEventListener("click", () => {
+    const isLight = document.documentElement.classList.toggle("light-mode");
+    localStorage.setItem("theme", isLight ? "light" : "dark");
+    updateIcon();
+});
+
+/* ── Retour en haut ── */
+const backBtn = document.getElementById("back-top");
+window.addEventListener("scroll", () => { backBtn.classList.toggle("visible", window.scrollY > 300); });
+backBtn.addEventListener("click", e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); });
+
+/* ── Scroll vers bilan ── */
+document.getElementById("btn-scroll-bilan").addEventListener("click", e => {
+    e.preventDefault();
+    document.getElementById("bilan").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+</script>
+
 </body>
 </html>
